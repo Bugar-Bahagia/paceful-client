@@ -7,4 +7,13 @@ export default {
     extend: {},
   },
   plugins: [daisyui],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#ffffff"
+        }
+      }
+    ]
+  }
 };
