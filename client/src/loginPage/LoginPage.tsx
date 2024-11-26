@@ -144,7 +144,7 @@ const LoginPage = () => {
           </div>
 
           <p className="text-sm font-light text-[#cddc39] text-center mt-4">
-            Don’t have an account yet? <a href="#" className="font-medium text-[#ff5722] hover:underline">Sign up</a>
+            Don’t have an account yet? <a href="/register" className="font-medium text-[#ff5722] hover:underline">Sign up</a>
           </p>
         </div>
       </div>
