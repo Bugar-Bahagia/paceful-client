@@ -50,6 +50,7 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
   };
 
   return (
+    <div className="pb-10">
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-300">
     <form onSubmit={handleSubmitForm} className="space-y-6">
       {/* Activity Type */}
@@ -144,6 +145,6 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
       </div>
     </form>
   </div>
-  
+  </div>  
   );
 }
