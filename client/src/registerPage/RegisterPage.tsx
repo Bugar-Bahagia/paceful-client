@@ -3,10 +3,10 @@ import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
 const RegisterPage = () => {
-  const [fullname, setFullname] = useState<string>('')
+  const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [dob, setDob] = useState<string>('')
+  const [dateOfBirth, setDateOfBirth] = useState<string>('')
   const navigate = useNavigate()
   const baseURL = 'http://localhost:3000'
 
@@ -14,7 +14,7 @@ const RegisterPage = () => {
     e.preventDefault()
 
     // Validasi input
-    if (!fullname || !email || !password || !dob) {
+    if (!name || !email || !password || !dateOfBirth) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -24,12 +24,12 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch(`${baseURL}/register`, {
+      const response = await fetch(`${baseURL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fullname, email, password, dob }),
+        body: JSON.stringify({ name, email, password, dateOfBirth }),
       })
 
       const result = await response.json()
@@ -72,7 +72,7 @@ const RegisterPage = () => {
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
               <label
-                htmlFor="fullname"
+                htmlFor="name"
                 className="block mb-2 text-sm font-medium"
                 style={{ color: '#009688' }}
               >
@@ -80,10 +80,10 @@ const RegisterPage = () => {
               </label>
               <input
                 type="text"
-                name="fullname"
-                id="fullname"
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="bg-gray-100 border border-[#cddc39] text-gray-900 rounded-lg focus:ring-2 focus:ring-[#009688] block w-full p-2 transition duration-150 ease-in-out"
                 placeholder=""
                 required
@@ -137,10 +137,10 @@ const RegisterPage = () => {
               </label>
               <input
                 type="date"
-                name="dob"
-                id="dob"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
+                name="dateOfBirth"
+                id="dateOfBirth"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
                 className="bg-gray-100 border border-[#cddc39] text-gray-900 rounded-lg focus:ring-2 focus:ring-[#009688] block w-full p-2 transition duration-150 ease-in-out"
                 required
               />
