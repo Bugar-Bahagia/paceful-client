@@ -1,27 +1,76 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 const LoginPage = () => {
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const baseURL = 'http://localhost:3000'
+  const navigate = useNavigate()
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Login Manual:", { email, password })
-    // Perform validation or call login API
+
+    try {
+      const response = await axios.post(`${baseURL}/login`, {
+        email,
+        password,
+      })
+
+      const { access_token } = response.data
+
+
+      localStorage.setItem('token', access_token)
+
+      alert('Login successful')
+
+      navigate('/')
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Login failed:', error.response?.data || error.message)
+      } else {
+        console.error('Unexpected error:', error)
+      }
+      alert('Login failed. Please check your credentials.')
+    }
   }
 
-  const responseMessage = (response: CredentialResponse) => {
-    console.log(response)
+  const responseMessage = async (response: CredentialResponse) => {
     if (response.credential) {
-      localStorage.setItem("token", response.credential)
-      // navigate('/')
+      console.log("Google Token:", response.credential)
+      try {
+        const backendResponse = await axios.post(
+          `${baseURL}/user/googlelogin`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${response.credential}`,
+            }
+          }
+        )
+
+        const { access_token } = backendResponse.data
+        console.log("Access Token received from backend:", access_token)
+
+        localStorage.setItem('token', access_token)
+
+        alert('Google login successful')
+        navigate('/')
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error('Google login failed:', error.response?.data || error.message)
+        } else {
+          console.error('Unexpected error:', error)
+        }
+        alert('Google login failed. Please try again.')
+      }
     }
   }
 
   const errorMessage = () => {
-    console.error("Login Failed")
-    alert("Login failed. Please try again.")
+    alert('Google login failed. Please try again.')
   }
 
   return (
@@ -83,7 +132,6 @@ const LoginPage = () => {
             </button>
           </form>
 
-          {/* Google Login */}
           <div className="mt-6 flex justify-center items-center">
             <GoogleLogin
               onSuccess={responseMessage}
@@ -95,8 +143,6 @@ const LoginPage = () => {
             />
           </div>
 
-
-          {/* Link to Sign Up */}
           <p className="text-sm font-light text-[#cddc39] text-center mt-4">
             Don’t have an account yet? <a href="#" className="font-medium text-[#ff5722] hover:underline">Sign up</a>
           </p>
