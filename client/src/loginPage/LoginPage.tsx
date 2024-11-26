@@ -14,26 +14,20 @@ const LoginPage = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post(`${baseURL}/login`, {
+      const response = await axios.post(`${baseURL}/auth/login`, {
         email,
         password,
       })
-
       const { access_token } = response.data
-
-
       localStorage.setItem('token', access_token)
-
       alert('Login successful')
-
       navigate('/')
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        console.error('Login failed:', error.response?.data || error.message)
-      } else {
-        console.error('Unexpected error:', error)
+        const errorMsg = error.response?.data?.message || 'Login failed'
+        console.error('Error:', errorMsg)
+        alert(errorMsg)
       }
-      alert('Login failed. Please check your credentials.')
     }
   }
 
@@ -42,7 +36,7 @@ const LoginPage = () => {
       console.log("Google Token:", response.credential)
       try {
         const backendResponse = await axios.post(
-          `${baseURL}/user/googlelogin`,
+          `${baseURL}/auth/googlelogin`,
           {},
           {
             headers: {
@@ -52,19 +46,16 @@ const LoginPage = () => {
         )
 
         const { access_token } = backendResponse.data
-        console.log("Access Token received from backend:", access_token)
-
+        // console.log("Access Token received from backend:", access_token)
         localStorage.setItem('token', access_token)
-
         alert('Google login successful')
         navigate('/')
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-          console.error('Google login failed:', error.response?.data || error.message)
-        } else {
-          console.error('Unexpected error:', error)
+          const errorMsg = error.response?.data?.message || 'Google login failed'
+          console.error('Error:', errorMsg)
+          alert(errorMsg)
         }
-        alert('Google login failed. Please try again.')
       }
     }
   }
@@ -108,21 +99,6 @@ const LoginPage = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    type="checkbox"
-                    className="w-4 h-4 border border-[#009688] rounded bg-gray-50 focus:ring-3 focus:ring-[#009688]"
-                    required
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="remember" className="text-gray-600">Remember me</label>
-                </div>
-              </div>
-              <a href="#" className="text-sm font-medium text-[#ff5722] hover:underline">Forgot password?</a>
             </div>
             <button
               type="submit"
@@ -144,7 +120,7 @@ const LoginPage = () => {
           </div>
 
           <p className="text-sm font-light text-[#cddc39] text-center mt-4">
-            Don’t have an account yet? <a href="#" className="font-medium text-[#ff5722] hover:underline">Sign up</a>
+            Don’t have an account yet? <a href="/register" className="font-medium text-[#ff5722] hover:underline">Sign up</a>
           </p>
         </div>
       </div>
