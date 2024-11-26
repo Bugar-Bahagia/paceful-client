@@ -33,7 +33,7 @@ export default function Navbar() {
               <Link to={"/"}>Dashboard</Link>
             </li>
             <li>
-              <Link to={"/activity"}>Activity Log</Link>
+              <Link to={"/activity-log"}>Activity Log</Link>
             </li>
             <li>
               <Link to={"/goal"}>Goals</Link>
@@ -46,7 +46,7 @@ export default function Navbar() {
               <Link to={"/"}>Dashboard</Link>
             </li>
             <li>
-              <Link to={"/activity"}>Activity Log</Link>
+              <Link to={"/activity-log"}>Activity Log</Link>
             </li>
             <li>
               <Link to={"/goal"}>Goals</Link>
