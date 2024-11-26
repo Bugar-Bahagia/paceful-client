@@ -1,10 +1,26 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import LoginPage from './loginPage/LoginPage'
 import Home from "./Pages/Home"
 import RegisterPage from './registerPage/RegisterPage'
 
 const router = createBrowserRouter([
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/login",
+    loader: () => {
+      const isLoggedIn = localStorage.getItem("access_token")
+      if (isLoggedIn) {
+        throw redirect("/")
+      } else {
+        return null
+      }
+    },
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element:
@@ -13,14 +29,7 @@ const router = createBrowserRouter([
         <Home />
       </>
   },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
+
 ])
 
 function App() {
