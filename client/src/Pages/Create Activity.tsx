@@ -29,10 +29,10 @@ export default function CreateActivity() {
       // Make the POST request to create an activity
       await axiosClient({
         method: "POST",
-        url: "/your-endpoint", // Replace with the actual endpoint
+        url: "http://localhost:3000/activities", // Replace with the actual endpoint
         data, // Send the data from the form
         headers: {
-          "Content-Type": "application/json", // Adjust headers as necessary
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Adjust headers as necessary
         },
       });
 

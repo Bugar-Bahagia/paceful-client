@@ -5,6 +5,7 @@ import Home from "./Pages/Home"
 import RegisterPage from './registerPage/RegisterPage'
 // import CreateActivity from "./Pages/Create Activity";
 import AllActivity from "./Pages/Activity-log";
+import UpdateActivity from "./Pages/Update Activity"
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
     <>
     <Navbar />
     <AllActivity />
+    </>
+  },
+  {
+    path: '/update-activity/:id',
+    element:
+    <>
+    <Navbar/>
+    <UpdateActivity/>
     </>
   }
 ])

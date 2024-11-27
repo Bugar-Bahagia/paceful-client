@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosClient from "../utils/axiosClient";
+// import FormAddActivity from "../components/FormActivity"; // Adjusted the import for consistency
 
-// Define the Active type (same as in CreateActivity and UpdateActivity)
-interface Active {
+interface ActivityData {
   typeName: string;
   duration: string;
   distance: string;
@@ -9,43 +11,68 @@ interface Active {
   activityDate: string;
 }
 
-interface FormAddActivityProps {
-  active: Active;
-  handleSubmit: (data: Active) => void;
-  onChange: (name: string, value: string) => void; // Pass updated field name and value
-}
+export default function UpdateActivity() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-export default function FormAddActivity({ active, handleSubmit, onChange }: FormAddActivityProps) {
-  const [typeName, setTypeName] = useState<string>(active.typeName);
-  const [duration, setDuration] = useState<string>(active.duration);
-  const [distance, setDistance] = useState<string>(active.distance);
-  const [notes, setNotes] = useState<string>(active.notes);
-  const [activityDate, setActivityDate] = useState<string>(active.activityDate);
+  const [data, setData] = useState<ActivityData>({
+    typeName: "",
+    duration: "",
+    distance: "",
+    notes: "",
+    activityDate: "",
+  });
 
-  // Sync form values with the `active` prop whenever it changes
-  useEffect(() => {
-    setTypeName(active.typeName);
-    setDuration(active.duration);
-    setDistance(active.distance);
-    setNotes(active.notes);
-    setActivityDate(active.activityDate);
-  }, [active]);
+  const fetchData = async () => {
+    if (!id) return;
 
-  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleSubmit({ typeName, duration, distance, notes, activityDate });
+    try {
+      const response = await axiosClient({
+        method: "GET",
+        url: `/activities/${id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setData(response.data);
+    } catch (error) {
+      console.log("🚀 ~ fetchData ~ error:", error);
+    }
   };
 
-  const handleChange = (name: string, value: string) => {
-    // Update the state for the corresponding field
-    if (name === "typeName") setTypeName(value);
-    if (name === "duration") setDuration(value);
-    if (name === "distance") setDistance(value);
-    if (name === "notes") setNotes(value);
-    if (name === "activityDate") setActivityDate(value);
+  const handleUpdate = async (formData: ActivityData) => {
+    try {
+      await axiosClient({
+        method: "PUT",
+        url: `/activities/${id}`,
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      navigate("/activity-log");
+    } catch (error) {
+      console.log("🚀 ~ handleUpdate ~ error:", error);
+    }
+  };
 
-    // Call onChange to pass updated field to parent
-    onChange(name, value);
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  // Handle form field changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submit
+  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleUpdate(data);
   };
 
   return (
@@ -59,8 +86,8 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
             </label>
             <select
               name="typeName"
-              value={typeName}
-              onChange={(e) => handleChange("typeName", e.target.value)}
+              value={data.typeName}
+              onChange={handleChange}
               className="select select-bordered w-full border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             >
               <option disabled value="">
@@ -82,8 +109,8 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
             <input
               name="duration"
               type="number"
-              value={duration}
-              onChange={(e) => handleChange("duration", e.target.value)}
+              value={data.duration}
+              onChange={handleChange}
               placeholder="example: 10"
               className="input input-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -97,8 +124,8 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
             <input
               name="distance"
               type="number"
-              value={distance}
-              onChange={(e) => handleChange("distance", e.target.value)}
+              value={data.distance}
+              onChange={handleChange}
               placeholder="example: 1000"
               className="input input-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -112,8 +139,8 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
             <input
               name="notes"
               type="text"
-              value={notes}
-              onChange={(e) => handleChange("notes", e.target.value)}
+              value={data.notes}
+              onChange={handleChange}
               placeholder="Enter notes"
               className="input input-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -127,8 +154,8 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
             <input
               name="activityDate"
               type="date"
-              value={activityDate}
-              onChange={(e) => handleChange("activityDate", e.target.value)}
+              value={data.activityDate}
+              onChange={handleChange}
               placeholder="Enter date"
               className="input input-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
