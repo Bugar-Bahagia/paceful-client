@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-//   const isLoggedin = cookies().has("Authorization");
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear the authentication token from local storage (or session storage)
+    localStorage.removeItem("access_token");  // Or use sessionStorage, depending on your setup
+
+    // Redirect to the login page after logout
+    navigate("/login");
+  };
 
   return (
     <div className="navbar bg-base-100 border border-black-100">
@@ -33,7 +40,7 @@ export default function Navbar() {
               <Link to={"/"}>Dashboard</Link>
             </li>
             <li>
-              <Link to={"/activity"}>Activity Log</Link>
+              <Link to={"/activity-log"}>Activity Log</Link>
             </li>
             <li>
               <Link to={"/goal"}>Goals</Link>
@@ -42,11 +49,11 @@ export default function Navbar() {
         </div>
         <div className="hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-          <li>
+            <li>
               <Link to={"/"}>Dashboard</Link>
             </li>
             <li>
-              <Link to={"/activity"}>Activity Log</Link>
+              <Link to={"/activity-log"}>Activity Log</Link>
             </li>
             <li>
               <Link to={"/goal"}>Goals</Link>
@@ -63,27 +70,22 @@ export default function Navbar() {
       {/* Bagian kanan navbar */}
       <div className="navbar-end">
         <ul className="menu menu-horizontal px-1">
-            <li>
+          <li>
             <Link to={"/profile"}>Profile</Link>
-            </li>
-          {/* {isLoggedin ? ( */}
-            <li>
-              <form
-                // action={async () => {
-                //   "use server";
-
-                //   cookies().delete("Authorization");
-                //   redirect("/login");
-                // }}
-              >
-                <button>Logout</button>
-              </form>
-            </li>
-           {/* ) : (  */}
-            <li>
-              <Link to={"/login"}>Login</Link>
-            </li>
-           {/* )}  */}
+          </li>
+          <li>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();  // Prevent page refresh on form submit
+                handleLogout();
+              }}
+            >
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+          <li>
+            <Link to={"/login"}>Login</Link>
+          </li>
         </ul>
       </div>
     </div>
