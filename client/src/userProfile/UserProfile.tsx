@@ -28,7 +28,13 @@ const UserProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         })
-        setProfile(response.data.data) // Set profile data dari response backend
+
+        const { email, name, dateOfBirth } = response.data.data
+        console.log("CHECKDATA", response.data)
+        // Format dateOfBirth ke format YYYY-MM-DD
+        const formattedDate = dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : ''
+
+        setProfile({ email, name, dateOfBirth: formattedDate }) // Simpan format tanggal yang valid
       } catch (error) {
         console.error('Error fetching profile:', error)
         alert('Failed to fetch profile')
