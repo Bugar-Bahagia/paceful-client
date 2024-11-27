@@ -19,7 +19,15 @@ const LoginPage = () => {
         password,
       })
       const { access_token } = response.data
+
+      const responseProfile = await axios.get(`${baseURL}/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`, // Pass the Bearer token here
+        },
+      })
+
       localStorage.setItem('token', access_token)
+      localStorage.setItem('userProfile', JSON.stringify(responseProfile.data))
       alert('Login successful')
       navigate('/')
     } catch (error: unknown) {

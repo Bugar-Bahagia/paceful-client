@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar"
 import LoginPage from './loginPage/LoginPage'
 import Home from "./Pages/Home"
 import RegisterPage from './registerPage/RegisterPage'
+import UserProfile from './userProfile/UserProfile'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,14 @@ const router = createBrowserRouter([
       <>
         <Navbar />,
         <Home />
+      </>
+  },
+  {
+    path: "/profile",
+    element:
+      <>
+        <Navbar />,
+        <UserProfile />
       </>
   },
 
