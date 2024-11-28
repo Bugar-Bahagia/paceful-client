@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
+import axios from 'axios'
 
 const RegisterPage = () => {
   const [name, setName] = useState<string>('')
@@ -57,6 +59,37 @@ const RegisterPage = () => {
         text: 'Something went wrong. Please try again later!',
       })
     }
+  }
+  const responseMessage = async (response: CredentialResponse) => {
+    if (response.credential) {
+      console.log("Google Token:", response.credential)
+      try {
+        const backendResponse = await axios.post(
+          `${baseURL}/auth/googlelogin`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${response.credential}`,
+            }
+          }
+        )
+
+        const { access_token } = backendResponse.data
+        localStorage.setItem('token', access_token)
+        Swal.fire('Google login successful', '', 'success')
+        navigate('/')
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const errorMsg = error.response?.data?.message || 'Google login failed'
+          console.error('Error:', errorMsg)
+          Swal.fire('Error', errorMsg, 'error')
+        }
+      }
+    }
+  }
+
+  const errorMessage = () => {
+    Swal.fire('Error', 'Google login failed. Please try again.', 'error')
   }
 
   return (
@@ -152,6 +185,16 @@ const RegisterPage = () => {
               Sign up
             </button>
           </form>
+          <div className="mt-6 flex justify-center items-center">
+            <GoogleLogin
+              onSuccess={responseMessage}
+              onError={errorMessage}
+              shape="pill"
+              useOneTap
+              theme="filled_blue"
+              size="large"
+            />
+          </div>
 
           <p className="text-sm font-light text-gray-500 text-center mt-4">
             Already have an account?{' '}
