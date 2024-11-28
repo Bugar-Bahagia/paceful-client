@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../utils/axiosClient";
-import FormAddActivity from "../components/Form activity";
+import axiosClient from "../../utils/axiosClient";
+import FormAddActivity from "../../components/Form activity";
 
 // Define types for active state
 interface Active {
@@ -46,8 +46,7 @@ export default function CreateActivity() {
       });
 
       // Navigate back to the home page or another page
-      nav('/');
-
+      nav("/");
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
     }
@@ -63,7 +62,11 @@ export default function CreateActivity() {
 
   return (
     <>
-      <FormAddActivity active={active} handleSubmit={handleCreate} onChange={handleFieldChange} />
+      <FormAddActivity
+        active={active}
+        handleSubmit={handleCreate}
+        onChange={handleFieldChange}
+      />
     </>
   );
 }
