@@ -3,9 +3,9 @@ import Navbar from "./components/Navbar"
 import LoginPage from './loginPage/LoginPage'
 import Home from "./Pages/Home"
 import RegisterPage from './registerPage/RegisterPage'
-// import CreateActivity from "./Pages/Create Activity";
-import AllActivity from "./Pages/Activity-log";
+import AllActivity from "./Pages/Activity-log"
 import UpdateActivity from "./Pages/Update Activity"
+import UserProfile from './userProfile/UserProfile'
 
 const router = createBrowserRouter([
   {
@@ -28,26 +28,34 @@ const router = createBrowserRouter([
     path: "/",
     element:
       <>
-        <Navbar />,
+        <Navbar />
         <Home />
+      </>
+  },
+  {
+    path: "/profile",
+    element:
+      <>
+        <Navbar />
+        <UserProfile />
       </>
   },
 
   {
     path: '/activity-log',
     element:
-    <>
-    <Navbar />
-    <AllActivity />
-    </>
+      <>
+        <Navbar />
+        <AllActivity />
+      </>
   },
   {
     path: '/update-activity/:id',
     element:
-    <>
-    <Navbar/>
-    <UpdateActivity/>
-    </>
+      <>
+        <Navbar />
+        <UpdateActivity />
+      </>
   }
 ])
 

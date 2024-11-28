@@ -1,15 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     // Clear the authentication token from local storage (or session storage)
-    localStorage.removeItem("access_token");  // Or use sessionStorage, depending on your setup
+    localStorage.removeItem("token")  // Or use sessionStorage, depending on your setup
+    localStorage.removeItem('userProfile')
 
     // Redirect to the login page after logout
-    navigate("/login");
-  };
+    navigate("/login")
+  }
 
   return (
     <div className="navbar bg-base-100 border border-black-100">
@@ -76,8 +77,8 @@ export default function Navbar() {
           <li>
             <form
               onSubmit={(e) => {
-                e.preventDefault();  // Prevent page refresh on form submit
-                handleLogout();
+                e.preventDefault()  // Prevent page refresh on form submit
+                handleLogout()
               }}
             >
               <button type="submit">Logout</button>
@@ -89,5 +90,5 @@ export default function Navbar() {
         </ul>
       </div>
     </div>
-  );
+  )
 }
