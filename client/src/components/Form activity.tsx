@@ -15,7 +15,11 @@ interface FormAddActivityProps {
   onChange: (name: string, value: string) => void; // Pass updated field name and value
 }
 
-export default function FormAddActivity({ active, handleSubmit, onChange }: FormAddActivityProps) {
+export default function FormAddActivity({
+  active,
+  handleSubmit,
+  onChange,
+}: FormAddActivityProps) {
   const [typeName, setTypeName] = useState<string>(active.typeName);
   const [duration, setDuration] = useState<string>(active.duration);
   const [distance, setDistance] = useState<string>(active.distance);
@@ -55,7 +59,9 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
           {/* Activity Type */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Activity Type</span>
+              <span className="label-text text-lg font-medium">
+                Activity Type
+              </span>
             </label>
             <select
               name="typeName"
@@ -64,7 +70,7 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
               className="select select-bordered w-full border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             >
               <option disabled value="">
-                select option
+                Dare yourself
               </option>
               <option value="running">Running</option>
               <option value="cycling">Cycling</option>
@@ -77,7 +83,9 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
           {/* Duration */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Duration in minutes</span>
+              <span className="label-text text-lg font-medium">
+                Duration in minutes
+              </span>
             </label>
             <input
               name="duration"
@@ -92,7 +100,9 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
           {/* Distance */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Distance in meters</span>
+              <span className="label-text text-lg font-medium">
+                Distance in meters
+              </span>
             </label>
             <input
               name="distance"
@@ -106,7 +116,7 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
 
           {/* Notes */}
           <div className="form-control">
-            <label className="label">
+            {/* <label className="label">
               <span className="label-text text-lg font-medium">Notes</span>
             </label>
             <input
@@ -116,13 +126,27 @@ export default function FormAddActivity({ active, handleSubmit, onChange }: Form
               onChange={(e) => handleChange("notes", e.target.value)}
               placeholder="Enter notes"
               className="input input-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            />
+            /> */}
+            <label className="form-control">
+              <div className="label">
+              <span className="label-text text-lg font-medium">Notes</span>
+              </div>
+              <textarea
+              name="notes"
+              value={notes}
+              onChange={(e) => handleChange("notes", e.target.value)}
+                className="textarea textarea-bordered w-full p-3 border-2 border-gray-300 rounded-md focus:ring-2"
+                placeholder="Notes"
+              ></textarea>
+            </label>
           </div>
 
           {/* Activity Date */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Activity Date</span>
+              <span className="label-text text-lg font-medium">
+                Activity Date
+              </span>
             </label>
             <input
               name="activityDate"
