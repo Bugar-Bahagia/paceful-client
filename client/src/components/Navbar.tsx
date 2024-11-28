@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom"
+import Swal from 'sweetalert2'
 
 export default function Navbar() {
   const navigate = useNavigate()
+  const isLoggedIn = !!localStorage.getItem("token")
 
   const handleLogout = () => {
     // Clear the authentication token from local storage (or session storage)
@@ -9,7 +11,9 @@ export default function Navbar() {
     localStorage.removeItem('userProfile')
 
     // Redirect to the login page after logout
-    navigate("/login")
+    Swal.fire("Logged Out!", "You have been logged out successfully.", "success").then(() => {
+      navigate("/login")
+    })
   }
 
   return (
@@ -74,19 +78,22 @@ export default function Navbar() {
           <li>
             <Link to={"/profile"}>Profile</Link>
           </li>
-          <li>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()  // Prevent page refresh on form submit
-                handleLogout()
-              }}
-            >
-              <button type="submit">Logout</button>
-            </form>
-          </li>
-          <li>
-            <Link to={"/login"}>Login</Link>
-          </li>
+          {isLoggedIn ? (
+            <li>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault() // Prevent page refresh on form submit
+                  handleLogout()
+                }}
+              >
+                <button type="submit">Logout</button>
+              </form>
+            </li>
+          ) : (
+            <li>
+              <Link to={"/login"}>Login</Link>
+            </li>
+          )}
         </ul>
       </div>
     </div>
