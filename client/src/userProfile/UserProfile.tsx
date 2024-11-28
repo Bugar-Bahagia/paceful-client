@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 interface UserProfile {
   email: string
   name: string
   dateOfBirth: string
 }
-
 
 const UserProfile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -17,7 +17,7 @@ const UserProfile = () => {
     const fetchProfile = async () => {
       const token = localStorage.getItem('token')
       if (!token) {
-        alert('You need to login first')
+        Swal.fire('Error', 'You need to login first', 'error')
         navigate('/login')
         return
       }
@@ -37,7 +37,7 @@ const UserProfile = () => {
         setProfile({ email, name, dateOfBirth: formattedDate }) // Simpan format tanggal yang valid
       } catch (error) {
         console.error('Error fetching profile:', error)
-        alert('Failed to fetch profile')
+        Swal.fire('Error', 'Failed to fetch profile', 'error')
         navigate('/login')
       }
     }
@@ -62,10 +62,10 @@ const UserProfile = () => {
           },
         }
       )
-      alert(response.data.message)
+      Swal.fire('Success', response.data.message, 'success')
     } catch (error) {
       console.error('Error updating profile:', error)
-      alert('Failed to update profile')
+      Swal.fire('Error', 'Failed to update profile', 'error')
     }
   }
 
@@ -73,19 +73,28 @@ const UserProfile = () => {
     const token = localStorage.getItem('token')
     if (!token) return
 
-    if (window.confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
+    const confirmation = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+    })
+
+    if (confirmation.isConfirmed) {
       try {
         const response = await axios.delete('http://localhost:3000/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        alert(response.data.message)
+        Swal.fire('Success', response.data.message, 'success')
         localStorage.clear()
         navigate('/register') // Redirect ke halaman registrasi setelah menghapus akun
       } catch (error) {
         console.error('Error deleting profile:', error)
-        alert('Failed to delete profile')
+        Swal.fire('Error', 'Failed to delete profile', 'error')
       }
     }
   }

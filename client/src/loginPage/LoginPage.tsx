@@ -2,7 +2,7 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import Swal from 'sweetalert2'
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>('')
@@ -28,13 +28,15 @@ const LoginPage = () => {
 
       localStorage.setItem('token', access_token)
       localStorage.setItem('userProfile', JSON.stringify(responseProfile.data))
-      alert('Login successful')
+      Swal.fire('Login successful', '', 'success')
       navigate('/')
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const errorMsg = error.response?.data?.message || 'Login failed'
         console.error('Error:', errorMsg)
-        alert(errorMsg)
+        Swal.fire('Error', errorMsg, 'error')
+      } else {
+        Swal.fire('Error', 'An unexpected error occurred', 'error')
       }
     }
   }
@@ -54,22 +56,21 @@ const LoginPage = () => {
         )
 
         const { access_token } = backendResponse.data
-        // console.log("Access Token received from backend:", access_token)
         localStorage.setItem('token', access_token)
-        alert('Google login successful')
+        Swal.fire('Google login successful', '', 'success')
         navigate('/')
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           const errorMsg = error.response?.data?.message || 'Google login failed'
           console.error('Error:', errorMsg)
-          alert(errorMsg)
+          Swal.fire('Error', errorMsg, 'error')
         }
       }
     }
   }
 
   const errorMessage = () => {
-    alert('Google login failed. Please try again.')
+    Swal.fire('Error', 'Google login failed. Please try again.', 'error')
   }
 
   return (

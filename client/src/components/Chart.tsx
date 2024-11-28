@@ -18,18 +18,6 @@ interface ChartProps {
   data?: number[]   // Data batang
 }
 
-// interface ChartDataProps {
-//   id?: number
-//   UserId?: number
-//   typeName?: string
-//   duration?: string
-//   distance?: string
-//   caloriesBurned?: number
-//   activityDate?: string
-//   notes?: string
-//   createdAt?: string
-//   updatedAt?: string
-// }
 
 const ChartComponent: React.FC<ChartProps> = ({ labels, data }) => {
   const chartData = {
