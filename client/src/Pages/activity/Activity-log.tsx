@@ -3,6 +3,7 @@ import CreateActivity from "./Create Activity";
 import UpdateActivity from "./Update Activity";
 import axiosClient from "../../utils/axiosClient";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 interface Active {
   id: string;
@@ -16,9 +17,7 @@ interface Active {
 
 export default function AllActivity() {
   const [data, setData] = useState<Active[]>([]);
-  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(
-    null
-  );
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
   const nav = useNavigate();
 
   const fetchingActivity = async () => {
@@ -30,10 +29,7 @@ export default function AllActivity() {
       });
       setData(response.data);
     } catch (error: any) {
-      console.error(
-        "Error while fetching activities:",
-        error?.response?.data || error.message
-      );
+      console.error("Error while fetching activities:", error?.response?.data || error.message);
     }
   };
 
@@ -41,47 +37,60 @@ export default function AllActivity() {
     fetchingActivity();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token is missing");
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this activity!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) throw new Error("Token is missing");
 
-      await axiosClient.delete(`/activities/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setData((prevActive) =>
-        prevActive.filter((activity) => activity.id !== id)
-      );
-    } catch (error: any) {
-      console.error(
-        "Error while deleting activity:",
-        error?.response?.data || error.message
-      );
-    }
+          await axiosClient.delete(`/activities/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          setData((prevActive) => prevActive.filter((activity) => activity.id !== id));
+          Swal.fire(
+            'Deleted!',
+            'Your activity has been deleted.',
+            'success'
+          );
+        } catch (error: any) {
+          console.error("Error while deleting activity:", error?.response?.data || error.message);
+          Swal.fire(
+            'Error!',
+            'There was an issue deleting the activity.',
+            'error'
+          );
+        }
+      }
+    });
   };
 
   const formatNumber = (num: number): string => num.toLocaleString();
 
   const openModal = (activityId: string | null = null) => {
     setSelectedActivityId(activityId);
-    const modal = document.getElementById(
-      "activity_modal"
-    ) as HTMLDialogElement;
+    const modal = document.getElementById("activity_modal") as HTMLDialogElement;
     if (modal) modal.showModal();
   };
 
   const closeModal = () => {
     setSelectedActivityId(null);
-    const modal = document.getElementById(
-      "activity_modal"
-    ) as HTMLDialogElement;
+    const modal = document.getElementById("activity_modal") as HTMLDialogElement;
     if (modal) modal.close();
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    const modal = document.getElementById(
-      "activity_modal"
-    ) as HTMLDialogElement;
+    const modal = document.getElementById("activity_modal") as HTMLDialogElement;
     if (e.target === modal) closeModal();
   };
 

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import FormAddActivity from "../../components/Form activity";
+import Swal from 'sweetalert2'
+import { AxiosError } from 'axios';
+
 
 // Define types for active state
 interface Active {
@@ -22,21 +25,19 @@ export default function CreateActivity() {
   });
 
   const nav = useNavigate();
-
-  // Function to handle form submission (create activity)
+  
   const handleCreate = async (data: Active) => {
     try {
-      // Make the POST request to create an activity
       await axiosClient({
         method: "POST",
-        url: "http://localhost:3000/activities", // Replace with the actual endpoint
-        data, // Send the data from the form
+        url: "http://localhost:3000/activities",
+        data,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Adjust headers as necessary
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
-      // Clear form after successful submission
+  
+      // Reset the form after successful submission
       setActive({
         typeName: "",
         duration: "",
@@ -44,19 +45,51 @@ export default function CreateActivity() {
         notes: "",
         activityDate: "",
       });
-
-      // Navigate back to the home page or another page
-      nav("/");
+  
+      // Close the modal by setting the modal state in parent (AllActivity)
+      const modal = document.getElementById("activity_modal") as HTMLDialogElement;
+      if (modal) modal.close();
+  
+      // Show success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Create activity successful!',
+      });
+  
+      // Refresh the activities list on the home page
+      nav("/"); // Navigate to the list of activities page (refreshes the data)
+      
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
+  
+      // Check if error is an instance of AxiosError to safely access the response
+      if (error instanceof AxiosError && error.response?.status === 400) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
+        });
+  
+        // Close modal when there is a 400 error
+        const modal = document.getElementById("activity_modal") as HTMLDialogElement;
+        if (modal) modal.close();
+      } else {
+        // Show a generic error message for other types of error
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong. Please try again later!',
+        });
+      }
     }
   };
+  
 
-  // Function to update active state when form fields change
   const handleFieldChange = (name: string, value: string) => {
     setActive((prevActive) => ({
       ...prevActive,
-      [name]: value, // Update the specific field in the active state
+      [name]: value, 
     }));
   };
 
