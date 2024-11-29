@@ -10,6 +10,7 @@ import RegisterPage from "./registerPage/RegisterPage";
 import AllActivity from "./Pages/activity/Activity-log";
 import UpdateActivity from "./Pages/activity/Update Activity";
 import UserProfile from "./userProfile/UserProfile";
+import AllGoals from "./Pages/goal/Goals";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
+        <AllGoals />
       </>
     ),
   },
