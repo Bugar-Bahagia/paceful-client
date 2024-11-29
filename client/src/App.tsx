@@ -1,5 +1,6 @@
 import {
   createBrowserRouter,
+  Outlet,
   redirect,
   RouterProvider,
 } from "react-router-dom";
@@ -11,6 +12,7 @@ import AllActivity from "./Pages/activity/Activity-log";
 import UpdateActivity from "./Pages/activity/Update Activity";
 import UserProfile from "./userProfile/UserProfile";
 import AllGoals from "./Pages/goal/Goals";
+import Footer from "./components/Footer";
 
 const router = createBrowserRouter([
   {
@@ -29,43 +31,50 @@ const router = createBrowserRouter([
     },
     element: <LoginPage />,
   },
+  
   {
-    path: "/",
-    element: (
-      <>
-        <Navbar />
-        <Home />
-      </>
-    ),
-  },
-  {
-    path: "/profile",
-    element: (
-      <>
-        <Navbar />
-        <UserProfile />
-      </>
-    ),
-  },
-
-  {
-    path: "/activity-log",
-    element: (
-      <>
-        <Navbar />
-        <AllActivity />
-      </>
-    ),
-  },
-  {
-    path: "/goal",
-    element: (
-      <>
-        <Navbar />
-        <AllGoals />
-      </>
-    ),
-  },
+    element:
+    <>
+    <Navbar />
+    <Outlet />
+    <Footer />
+    </>,
+    children: [
+      {
+        path: "/",
+        element: (
+          <>
+            <Home />
+          </>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <>
+            <UserProfile />
+          </>
+        ),
+      },
+    
+      {
+        path: "/activity-log",
+        element: (
+          <>
+            <AllActivity />
+          </>
+        ),
+      },
+      {
+        path: "/goal",
+        element: (
+          <>
+            <AllGoals />
+          </>
+        ),
+      },
+    ]
+  }
 ]);
 
 function App() {
