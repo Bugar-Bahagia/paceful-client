@@ -54,11 +54,10 @@ export default function FormAddGoal({
               <option disabled value="">
                 Select goal type
               </option>
-              <option value="running">Running</option>
-              <option value="cycling">Cycling</option>
-              <option value="swimming">Swimming</option>
-              <option value="hiking">Hiking</option>
-              <option value="walking">Walking</option>
+              <option value="steps">Steps</option>
+              <option value="distance">Distance</option>
+              <option value="calories burned">Calories Burned</option>
+              <option value="duration">Duration</option>
             </select>
           </div>
 
