@@ -29,7 +29,8 @@ const UserProfile = () => {
           },
         })
 
-        const { email, name, dateOfBirth } = response.data.data
+        const { email } = response.data
+        const { name, dateOfBirth } = response.data.data
         console.log("CHECKDATA", response.data)
         // Format dateOfBirth ke format YYYY-MM-DD
         const formattedDate = dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : ''

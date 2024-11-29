@@ -1,51 +1,26 @@
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js"
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js"
 import { Bar } from "react-chartjs-2"
 
-// Register komponen Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 interface ChartProps {
-  labels?: string[] // Label untuk sumbu X
-  data?: number[]   // Data batang
+  labels: string[]
+  datasets: {
+    label: string
+    data: number[]
+    backgroundColor: string
+    borderColor: string
+    borderWidth: number
+  }[]
 }
 
-
-const ChartComponent: React.FC<ChartProps> = ({ labels, data }) => {
-  const chartData = {
+const ChartComponent: React.FC<ChartProps> = ({ labels, datasets }) => {
+  const data = {
     labels,
-    datasets: [
-      {
-        label: "Data",
-        data,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
+    datasets,
   }
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: false,
-      },
-    },
-  }
-
-  return <Bar data={chartData} options={options} />
+  return <Bar data={data} options={{ responsive: true, plugins: { legend: { position: "top" } } }} />
 }
 
 export default ChartComponent
