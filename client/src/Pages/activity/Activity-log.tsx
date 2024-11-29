@@ -109,7 +109,7 @@ export default function AllActivity() {
               <p>{formatNumber(Number(e.duration))} menit</p>
               <p>{formatNumber(Number(e.distance))} meter</p>
               <p>{formatNumber(Number(e.caloriesBurned))} kalori</p>
-              <p className="text-sm text-gray-400">{e.activityDate}</p>
+              <p className="text-sm text-gray-400">{new Date(e.activityDate).toLocaleDateString()}</p>
               <div className="card-actions justify-end">
                 <button
                   onClick={() => handleDelete(e.id)}
