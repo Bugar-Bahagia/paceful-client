@@ -1,16 +1,59 @@
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface UserProfile {
+  email: string;
+  name: string;
+  dateOfBirth: string;
+}
 
 export default function Navbar() {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("token");
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        Swal.fire("Error", "You need to login first", "error");
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/users/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const { email, name, dateOfBirth } = response.data.data;
+        console.log("CHECKDATA", response.data);
+        const formattedDate = dateOfBirth
+          ? new Date(dateOfBirth).toISOString().split("T")[0]
+          : "";
+
+        setProfile({ email, name, dateOfBirth: formattedDate }); 
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        Swal.fire("Error", "Failed to fetch profile", "error");
+        navigate("/login");
+      }
+    };
+
+    fetchProfile();
+  }, [navigate]);
 
   const handleLogout = () => {
-    // Clear the authentication token from local storage (or session storage)
-    localStorage.removeItem("token"); // Or use sessionStorage, depending on your setup
+    localStorage.removeItem("token"); 
     localStorage.removeItem("userProfile");
 
-    // Redirect to the login page after logout
     Swal.fire(
       "Logged Out!",
       "You have been logged out successfully.",
@@ -77,13 +120,21 @@ export default function Navbar() {
           <div
             tabIndex={0}
             role="button"
-            className="bg-accent  bg-neutral text-neutral-content w-12 rounded-full flex items-center justify-center cursor-pointer  border border-blue-500"
+            className="bg-accent bg-neutral text-neutral-content w-12 rounded-full flex items-center justify-center cursor-pointer border border-blue-500"
           >
-            <span>SY</span>
+            <span>
+              {
+                profile?.name
+                  ?.split(" ") 
+                  .map((word) => word[0]) 
+                  .join("") 
+                  .toUpperCase() 
+              }
+            </span>
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-35 p-2 shadow "
+            className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-35 p-2 shadow"
           >
             <li>
               <Link to={"/profile"}>Profile</Link>
@@ -92,7 +143,7 @@ export default function Navbar() {
               <li>
                 <form
                   onSubmit={(e) => {
-                    e.preventDefault(); // Prevent page refresh on form submit
+                    e.preventDefault(); 
                     handleLogout();
                   }}
                 >
@@ -106,28 +157,6 @@ export default function Navbar() {
             )}
           </ul>
         </div>
-
-        {/* <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link to={"/profile"}>Profile</Link>
-          </li>
-          {isLoggedIn ? (
-            <li>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault(); // Prevent page refresh on form submit
-                  handleLogout();
-                }}
-              >
-                <button type="submit">Logout</button>
-              </form>
-            </li>
-          ) : (
-            <li>
-              <Link to={"/login"}>Login</Link>
-            </li>
-          )}
-        </ul> */}
       </div>
     </div>
   );
