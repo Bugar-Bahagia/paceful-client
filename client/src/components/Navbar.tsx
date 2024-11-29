@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -34,12 +34,11 @@ export default function Navbar() {
         );
 
         const { email, name, dateOfBirth } = response.data.data;
-        console.log("CHECKDATA", response.data);
         const formattedDate = dateOfBirth
           ? new Date(dateOfBirth).toISOString().split("T")[0]
           : "";
 
-        setProfile({ email, name, dateOfBirth: formattedDate }); 
+        setProfile({ email, name, dateOfBirth: formattedDate });
       } catch (error) {
         console.error("Error fetching profile:", error);
         Swal.fire("Error", "Failed to fetch profile", "error");
@@ -51,7 +50,7 @@ export default function Navbar() {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
     localStorage.removeItem("userProfile");
 
     Swal.fire(
@@ -88,34 +87,77 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <Link to={"/"}>Dashboard</Link>
+              <NavLink
+                to={"/"}
+                style={({ isActive }) => ({
+                  color: isActive ? "green" : "black",
+                })}
+              >
+                Dashboard
+              </NavLink>
             </li>
             <li>
-              <Link to={"/activity-log"}>Activity Log</Link>
+              <NavLink
+                to={"/activity-log"}
+                style={({ isActive }) => ({
+                  color: isActive ? "green" : "black",
+                })}
+              >
+                Activity Log
+              </NavLink>
             </li>
             <li>
-              <Link to={"/goal"}>Goals</Link>
+              <NavLink
+                to={"/goal"}
+                style={({ isActive }) => ({
+                  color: isActive ? "green" : "black",
+                })}
+              >
+                Goals
+              </NavLink>
             </li>
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">daisyUI</a>
       </div>
+
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to={"/"}>Dashboard</Link>
+            <NavLink
+              to={"/"}
+              style={({ isActive }) => ({
+                color: isActive ? "green" : "black",
+              })}
+            >
+              Dashboard
+            </NavLink>
           </li>
           <li>
-            <Link to={"/activity-log"}>Activity Log</Link>
+            <NavLink
+              to={"/activity-log"}
+              style={({ isActive }) => ({
+                color: isActive ? "green" : "black",
+              })}
+            >
+              Activity Log
+            </NavLink>
           </li>
           <li>
-            <Link to={"/goal"}>Goals</Link>
+            <NavLink
+              to={"/goal"}
+              style={({ isActive }) => ({
+                color: isActive ? "green" : "black",
+              })}
+            >
+              Goals
+            </NavLink>
           </li>
         </ul>
       </div>
 
       {/* Bagian kanan navbar */}
-      <div className="navbar-end ">
+      <div className="navbar-end">
         <div className="avatar placeholder dropdown dropdown-end pr-4">
           <div
             tabIndex={0}
@@ -125,10 +167,10 @@ export default function Navbar() {
             <span>
               {
                 profile?.name
-                  ?.split(" ") 
-                  .map((word) => word[0]) 
-                  .join("") 
-                  .toUpperCase() 
+                  ?.split(" ") // Ambil inisial dari nama
+                  .map((word) => word[0]) // Ambil huruf pertama dari setiap kata
+                  .join("") // Gabungkan inisial
+                  .toUpperCase() // Ubah menjadi huruf kapital
               }
             </span>
           </div>
@@ -137,13 +179,20 @@ export default function Navbar() {
             className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-35 p-2 shadow"
           >
             <li>
-              <Link to={"/profile"}>Profile</Link>
+              <NavLink
+                to={"/profile"}
+                style={({ isActive }) => ({
+                  color: isActive ? "green" : "black",
+                })}
+              >
+                Profile
+              </NavLink>
             </li>
             {isLoggedIn ? (
               <li>
                 <form
                   onSubmit={(e) => {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     handleLogout();
                   }}
                 >
@@ -152,7 +201,14 @@ export default function Navbar() {
               </li>
             ) : (
               <li>
-                <Link to={"/login"}>Login</Link>
+                <NavLink
+                  to={"/login"}
+                  style={({ isActive }) => ({
+                    color: isActive ? "green" : "black",
+                  })}
+                >
+                  Login
+                </NavLink>
               </li>
             )}
           </ul>
