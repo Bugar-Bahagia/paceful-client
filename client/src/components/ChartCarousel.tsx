@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 import { Carousel } from "react-responsive-carousel"
-import ChartComponent from './Chart'
-import axios from 'axios'
-const baseURL = 'http://localhost:3000'
+import ChartComponent from "./Chart"
+import axios from "axios"
+
+const baseURL = "http://localhost:3000"
 
 interface ChartDataProps {
   id?: number
@@ -17,68 +18,88 @@ interface ChartDataProps {
   updatedAt?: string
 }
 
-const ChartCarousel = () => {
+const ChartCarousel: React.FC = () => {
   const [activities, setActivities] = useState<ChartDataProps[]>([])
+  const [selectedDataType, setSelectedDataType] = useState<string>("caloriesBurned")
 
-  // Fungsi untuk mendapatkan rentang tanggal
-  const getDateRange = () => {
-    if (activities.length === 0) return []
-
-    const firstDate = new Date(activities[0].activityDate)
-
-    const range = []
-    for (let i = -2;i <= 2;i++) {
-      const date = new Date(firstDate)
-      date.setDate(firstDate.getDate() + i)
-      range.push(date.toISOString().split('T')[0]) // Format: YYYY-MM-DD
-    }
-    return range
-  }
-
-  // Ambil data aktivitas yang ada
   const fetchActivity = async () => {
-    const access_token = await localStorage.getItem("token")
-    const responseActivities = await axios.get(`${baseURL}/activities`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    })
-    setActivities(responseActivities.data)
+    try {
+      const access_token = localStorage.getItem("token")
+      const response = await axios.get(`${baseURL}/activities`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+      const sortedActivities = response.data
+        .sort(
+          (a: ChartDataProps, b: ChartDataProps) =>
+            new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime()
+        )
+        .slice(0, 5)
+        .reverse()
+      setActivities(sortedActivities)
+    } catch (error) {
+      console.error("Failed to fetch activities:", error)
+    }
   }
 
   useEffect(() => {
     fetchActivity()
   }, [])
 
-  // Tentukan rentang tanggal (labels) untuk sumbu X
-  const activityDates = getDateRange()
+  const activityDates = activities.map((activity) =>
+    new Date(activity.activityDate).toISOString().split("T")[0]
+  )
 
-  // Menyusun data untuk grafik
-  const caloriesBurnedArray = activityDates.map(date => {
-    const activity = activities.find(activity => activity.activityDate === date)
-    return activity ? activity.caloriesBurned ?? 0 : 0
-  })
+  const getDataByType = () => {
+    switch (selectedDataType) {
+      case "caloriesBurned":
+        return activities.map((activity) => activity.caloriesBurned || 0)
+      case "duration":
+        return activities.map((activity) => Number(activity.duration) || 0)
+      default:
+        return []
+    }
+  }
 
-  const durationActivityArray = activityDates.map(date => {
-    const activity = activities.find(activity => activity.activityDate === date)
-    return activity ? Number(activity.duration) || 0 : 0
-  })
+  const chartLabel =
+    selectedDataType === "caloriesBurned" ? "Calories Burned" : "Activities Duration (Minutes)"
+
+  const chartData = {
+    labels: activityDates,
+    datasets: [
+      {
+        label: chartLabel,
+        data: getDataByType(),
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
+  }
 
   return (
     <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-      {/* Carousel */}
-      <Carousel showArrows={true} infiniteLoop={false} autoPlay={false} showThumbs={false}>
-        {/* Slide 1: Calories Burned */}
-        <div>
-          <h2>Calories Burned</h2>
-          <ChartComponent labels={activityDates} data={caloriesBurnedArray} />
-        </div>
 
-        {/* Slide 2: Activities Duration */}
-        <div>
-          <h2>Activities Duration (Minutes)</h2>
-          <ChartComponent labels={activityDates} data={durationActivityArray} />
-        </div>
+      <div style={{ marginBottom: "20px" }}>
+        <label htmlFor="dataType" style={{ marginRight: "10px" }}>
+        </label>
+        <select
+          id="dataType"
+          value={selectedDataType}
+          onChange={(e) => setSelectedDataType(e.target.value)}
+        >
+          <option value="caloriesBurned">Calories Burned</option>
+          <option value="duration">Activities Duration</option>
+        </select>
+      </div>
+
+
+      <Carousel showArrows={true} infiniteLoop={false} autoPlay={false} showThumbs={false}>
+        {[<div key={chartLabel}>
+          <h2>{chartLabel}</h2>
+          <ChartComponent labels={activityDates} datasets={chartData.datasets} />
+        </div>]}
       </Carousel>
     </div>
   )
