@@ -1,11 +1,15 @@
-import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
-import Navbar from "./components/Navbar"
-import LoginPage from './loginPage/LoginPage'
-import Home from "./Pages/Home"
-import RegisterPage from './registerPage/RegisterPage'
-import AllActivity from "./Pages/Activity-log"
-import UpdateActivity from "./Pages/Update Activity"
-import UserProfile from './userProfile/UserProfile'
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LoginPage from "./loginPage/LoginPage";
+import Home from "./Pages/Home";
+import RegisterPage from "./registerPage/RegisterPage";
+import AllActivity from "./Pages/activity/Activity-log";
+import UpdateActivity from "./Pages/activity/Update Activity";
+import UserProfile from "./userProfile/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -15,52 +19,55 @@ const router = createBrowserRouter([
   {
     path: "/login",
     loader: () => {
-      const isLoggedIn = localStorage.getItem("access_token")
+      const isLoggedIn = localStorage.getItem("access_token");
       if (isLoggedIn) {
-        throw redirect("/")
+        throw redirect("/");
       } else {
-        return null
+        return null;
       }
     },
     element: <LoginPage />,
   },
   {
     path: "/",
-    element:
+    element: (
       <>
         <Navbar />
         <Home />
       </>
+    ),
   },
   {
     path: "/profile",
-    element:
+    element: (
       <>
         <Navbar />
         <UserProfile />
       </>
+    ),
   },
 
   {
-    path: '/activity-log',
-    element:
+    path: "/activity-log",
+    element: (
       <>
         <Navbar />
         <AllActivity />
       </>
+    ),
   },
   {
-    path: '/update-activity/:id',
-    element:
+    path: "/goal",
+    element: (
       <>
         <Navbar />
-        <UpdateActivity />
       </>
-  }
-])
+    ),
+  },
+]);
 
 function App() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

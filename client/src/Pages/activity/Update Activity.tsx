@@ -18,7 +18,6 @@
 // export default function UpdateActivity({ activityId }: UpdateActivityProps) {
 //   // Ubah `id` menjadi `activityId` dalam kode Anda
 
-
 //   const { id } = useParams<{ id: string }>();
 //   const navigate = useNavigate();
 
@@ -183,11 +182,9 @@
 //   );
 // }
 
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../utils/axiosClient";
+import axiosClient from "../../utils/axiosClient";
 
 interface ActivityData {
   typeName: string;
@@ -202,7 +199,10 @@ interface UpdateActivityProps {
   onActivityUpdated: () => void; // Add this callback prop
 }
 
-export default function UpdateActivity({ activityId, onActivityUpdated }: UpdateActivityProps) {
+export default function UpdateActivity({
+  activityId,
+  onActivityUpdated,
+}: UpdateActivityProps) {
   const navigate = useNavigate();
 
   const [data, setData] = useState<ActivityData>({
@@ -222,11 +222,13 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-  
+
       // Convert the date string to yyyy-MM-dd format
       const activityData = response.data;
-      const formattedDate = new Date(activityData.activityDate).toISOString().split("T")[0];
-  
+      const formattedDate = new Date(activityData.activityDate)
+        .toISOString()
+        .split("T")[0];
+
       // Set the data state with the formatted date
       setData({
         ...activityData,
@@ -236,7 +238,6 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
       console.log("🚀 ~ fetchData ~ error:", error);
     }
   };
-  
 
   const handleUpdate = async (formData: ActivityData) => {
     try {
@@ -254,13 +255,14 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
       console.log("🚀 ~ handleUpdate ~ error:", error);
     }
   };
-  
 
   useEffect(() => {
     fetchData();
   }, [activityId]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
@@ -277,11 +279,12 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
     <div className="pb-10 ">
       <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-300">
         <form onSubmit={handleSubmitForm} className="space-y-6">
-         
- {/* Activity Type */}
- <div className="form-control">
+          {/* Activity Type */}
+          <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Activity Type</span>
+              <span className="label-text text-lg font-medium">
+                Activity Type
+              </span>
             </label>
             <select
               name="typeName"
@@ -303,7 +306,9 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
           {/* Duration */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Duration in minutes</span>
+              <span className="label-text text-lg font-medium">
+                Duration in minutes
+              </span>
             </label>
             <input
               name="duration"
@@ -318,7 +323,9 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
           {/* Distance */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Distance in meters</span>
+              <span className="label-text text-lg font-medium">
+                Distance in meters
+              </span>
             </label>
             <input
               name="distance"
@@ -348,7 +355,9 @@ export default function UpdateActivity({ activityId, onActivityUpdated }: Update
           {/* Activity Date */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text text-lg font-medium">Activity Date</span>
+              <span className="label-text text-lg font-medium">
+                Activity Date
+              </span>
             </label>
             <input
               name="activityDate"
