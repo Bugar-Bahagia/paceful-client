@@ -1,23 +1,21 @@
 import { useState } from "react"
 import GeminiAi from "../components/Gemini"
 import "react-responsive-carousel/lib/styles/carousel.min.css"
+import Dashboard from "../components/DashboardData"
 import ChartCarousel from '../components/ChartCarousel'
 
 export default function Home() {
   const [showGemini, setShowGemini] = useState(false)
 
-  const handleOpenGemini = () => {
-    setShowGemini(true)
-  }
-
-  const handleCloseGemini = () => {
-    setShowGemini(false)
-  }
+  const handleOpenGemini = () => setShowGemini(true)
+  const handleCloseGemini = () => setShowGemini(false)
+  
 
   return (
     <div className="relative">
       <h1>Welcome to Home Page</h1>
-      <ChartCarousel />
+
+      <Dashboard />
       
       {/* Floating Button with Image */}
       <button
@@ -31,6 +29,7 @@ export default function Home() {
           className="w-12 h-12"
         />
       </button>
+      {showGemini && <GeminiAi onClose={handleCloseGemini} />}
 
       {/* Gemini AI Modal centered */}
       {showGemini && (
