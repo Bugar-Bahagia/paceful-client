@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import CreateGoal from "./Create Goal";
-// import UpdateGoal from "./Update Goal";
-import axiosClient from "../../utils/axiosClient";
 import UpdateGoal from "./Update Goal";
+import axiosClient from "../../utils/axiosClient";
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 interface Goal {
   id: string;
@@ -36,21 +36,45 @@ export default function AllGoals() {
     fetchGoals();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token is missing");
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this goal!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) throw new Error("Token is missing");
 
-      await axiosClient.delete(`/goals/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setData((prevGoals) => prevGoals.filter((goal) => goal.id !== id));
-    } catch (error: any) {
-      console.error(
-        "Error while deleting goal:",
-        error?.response?.data || error.message
-      );
-    }
+          await axiosClient.delete(`/goals/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          setData((prevGoals) => prevGoals.filter((goal) => goal.id !== id));
+          Swal.fire(
+            'Deleted!',
+            'Your goal has been deleted.',
+            'success'
+          );
+        } catch (error: any) {
+          console.error(
+            "Error while deleting goal:",
+            error?.response?.data || error.message
+          );
+          Swal.fire(
+            'Error!',
+            'There was an issue deleting the goal.',
+            'error'
+          );
+        }
+      }
+    });
   };
 
   const openModal = (goalId: string | null = null) => {
@@ -96,7 +120,7 @@ export default function AllGoals() {
               <p>End Date: {new Date(goal.endDate).toLocaleDateString()}</p>
               <div className="card-actions justify-end">
                 <button
-                  onClick={() => handleDelete(goal.id)}
+                  onClick={() => handleDelete(goal.id)}  // Trigger SweetAlert2 here
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                 >
                   Delete
@@ -132,7 +156,7 @@ export default function AllGoals() {
               <UpdateGoal
                 goalId={selectedGoalId}
                 onGoalUpdated={fetchGoals}
-               /> 
+              /> 
             </>
           ) : (
             <>

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axiosClient from "../../utils/axiosClient";
+import Swal from 'sweetalert2';
 
 interface ActivityData {
   typeName: string;
@@ -12,15 +12,13 @@ interface ActivityData {
 
 interface UpdateActivityProps {
   activityId: string;
-  onActivityUpdated: () => void; // Add this callback prop
+  onActivityUpdated: () => void; // Callback to update activity list
 }
 
 export default function UpdateActivity({
   activityId,
   onActivityUpdated,
 }: UpdateActivityProps) {
-  const navigate = useNavigate();
-
   const [data, setData] = useState<ActivityData>({
     typeName: "",
     duration: "",
@@ -28,7 +26,9 @@ export default function UpdateActivity({
     notes: "",
     activityDate: "",
   });
+  const [initialData, setInitialData] = useState<ActivityData | null>(null); // Store the initial data
 
+  // Fetch activity data for the specified activity ID
   const fetchData = async () => {
     try {
       const response = await axiosClient({
@@ -45,16 +45,24 @@ export default function UpdateActivity({
         .toISOString()
         .split("T")[0];
 
-      // Set the data state with the formatted date
-      setData({
+      // Set the data state with the formatted date and store initial data
+      const fetchedData = {
         ...activityData,
         activityDate: formattedDate,
-      });
+      };
+      setData(fetchedData);
+      setInitialData(fetchedData); // Store the initial data to compare later
     } catch (error) {
       console.log("🚀 ~ fetchData ~ error:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Failed to fetch activity data. Please try again.',
+      });
     }
   };
 
+  // Handle updating the activity data
   const handleUpdate = async (formData: ActivityData) => {
     try {
       await axiosClient({
@@ -65,16 +73,54 @@ export default function UpdateActivity({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
+      // After successful update, close the modal and fetch updated data
       onActivityUpdated(); // Re-fetch activities after update
-      navigate("/activity-log"); // Navigate back to the activity log page
-    } catch (error) {
+      closeModal();
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Activity updated successfully!',
+      });
+    } catch (error: any) {
       console.log("🚀 ~ handleUpdate ~ error:", error);
+      if (error.response && error.response.status === 400) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Bad Request',
+          text: `Failed to update activity. ${error.response?.data?.message || 'Please check your input and try again.'}`,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong. Please try again later.',
+        });
+      }
+      closeModal(); // Close modal if there's an error
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [activityId]);
+  // Close modal automatically
+  const closeModal = () => {
+    // Assuming you're using a modal element with id 'activity_modal'
+    const modal = document.getElementById("activity_modal") as HTMLDialogElement;
+    if (modal) {
+      modal.close(); // Close the modal
+    }
+  };
+
+  // Check if the form data is different from initial data
+  const isFormDataChanged = (): boolean => {
+    if (!initialData) return false; // No initial data yet, so return false
+    return (
+      data.typeName !== initialData.typeName ||
+      data.duration !== initialData.duration ||
+      data.distance !== initialData.distance ||
+      data.notes !== initialData.notes ||
+      data.activityDate !== initialData.activityDate
+    );
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -88,12 +134,26 @@ export default function UpdateActivity({
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleUpdate(data);
+    closeModal()
+    // Check if data has been changed before submitting
+    if (!isFormDataChanged()) {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Changes Detected',
+        text: 'You have not made any changes to the data.',
+      });
+    } else {
+      handleUpdate(data); // Proceed with update if changes were made
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [activityId]);
 
   return (
     <div className="pb-10">
-      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-300">
+      <div id="activity_modal" className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-300">
         <form onSubmit={handleSubmitForm} className="space-y-6">
           {/* Activity Type (Read-Only) */}
           <div className="form-control">
@@ -160,6 +220,7 @@ export default function UpdateActivity({
             />
           </div>
 
+          {/* Submit Button */}
           <div className="text-center">
             <button
               type="submit"
