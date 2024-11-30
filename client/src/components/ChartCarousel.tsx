@@ -78,16 +78,30 @@ const ChartCarousel: React.FC = () => {
     ],
   }
 
-  return (
-    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+  const chartOptions = {
+    responsive: true,         // Membuat chart responsif terhadap ukuran pembungkus
+    maintainAspectRatio: false, // Agar chart bisa disesuaikan dengan ukuran pembungkus
+    plugins: {
+      legend: {
+        onClick: () => { },
+        labels: {
+          font: { size: 14 },
+          color: "#000",
+          textDecoration: "none",
+        },
+      },
+    },
+  }
 
-      <div style={{ marginBottom: "20px" }}>
-        <label htmlFor="dataType" style={{ marginRight: "10px" }}>
-        </label>
+
+  return (
+    <div style={{ maxWidth: "600px", margin: "0 auto", overflow: "hidden" }}>
+      <div className="my-4">
         <select
           id="dataType"
           value={selectedDataType}
           onChange={(e) => setSelectedDataType(e.target.value)}
+          className="p-2 border"
         >
           <option value="caloriesBurned">Calories Burned</option>
           <option value="duration">Activities Duration</option>
@@ -96,10 +110,12 @@ const ChartCarousel: React.FC = () => {
 
 
       <Carousel showArrows={true} infiniteLoop={false} autoPlay={false} showThumbs={false}>
-        {[<div key={chartLabel}>
-          <h2>{chartLabel}</h2>
-          <ChartComponent labels={activityDates} datasets={chartData.datasets} />
-        </div>]}
+        {
+          [<div key={chartLabel}>
+            <h2 style={{ textDecoration: "none" }}>{chartLabel}</h2>
+            <ChartComponent labels={activityDates} datasets={chartData.datasets} options={chartOptions} />
+          </div>]
+        }
       </Carousel>
     </div>
   )
