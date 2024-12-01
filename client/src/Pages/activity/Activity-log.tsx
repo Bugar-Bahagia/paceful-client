@@ -18,7 +18,6 @@ interface Active {
 export default function AllActivity() {
   const [data, setData] = useState<Active[]>([]);
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
-  const nav = useNavigate();
 
   const fetchingActivity = async () => {
     try {
@@ -95,7 +94,7 @@ export default function AllActivity() {
   };
 
   return (
-    <div className="bg bg-gradient-to-r from-teal-600 to-teal-800 min-h-screen">
+    <div className="bg bg-gradient-to-b from-teal-600 to-lemon-800 min-h-screen">
       <div className="flex justify-center items-center pt-10">
         <button
           className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 focus:outline-none"
@@ -109,10 +108,10 @@ export default function AllActivity() {
         {data.map((e) => (
           <div
             key={e.id}
-            className="card bg-gray-800 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="card bg-gradient-to-b from-white to-teal-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            <div className="card-body items-center text-center">
-              <h3 className="card-title text-xl font-semibold text-teal-400">
+            <div className="card-body items-center text-center text-black">
+              <h3 className="card-title text-xl font-semibold text-teal-400 underline">
                 {e.typeName.toUpperCase()}
               </h3>
               <p>{formatNumber(Number(e.duration))} menit</p>
