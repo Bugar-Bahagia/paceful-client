@@ -7,6 +7,7 @@ interface UserProfile {
   email: string;
   name: string;
   dateOfBirth: string;
+  avatar: string;
 }
 
 export default function Navbar() {
@@ -33,12 +34,12 @@ export default function Navbar() {
           }
         );
 
-        const { email, name, dateOfBirth } = response.data.data;
+        const { email, name, dateOfBirth, avatar } = response.data.data;
         const formattedDate = dateOfBirth
           ? new Date(dateOfBirth).toISOString().split("T")[0]
           : "";
 
-        setProfile({ email, name, dateOfBirth: formattedDate });
+        setProfile({ email, name, avatar, dateOfBirth: formattedDate });
       } catch (error) {
         console.error("Error fetching profile:", error);
         Swal.fire("Error", "Failed to fetch profile", "error");
@@ -162,17 +163,23 @@ export default function Navbar() {
           <div
             tabIndex={0}
             role="button"
-            className="bg-accent bg-neutral text-neutral-content w-12 rounded-full flex items-center justify-center cursor-pointer border border-blue-500"
+            className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer border border-blue-500 overflow-hidden"
           >
-            <span>
-              {
-                profile?.name
-                  ?.split(" ") // Ambil inisial dari nama
-                  .map((word) => word[0]) // Ambil huruf pertama dari setiap kata
-                  .join("") // Gabungkan inisial
-                  .toUpperCase() // Ubah menjadi huruf kapital
-              }
-            </span>
+            {profile?.avatar ? (
+              <img
+                src={profile.avatar}
+                alt="User Avatar"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="bg-accent bg-neutral text-neutral-content text-xl">
+                {profile?.name
+                  ?.split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .toUpperCase() || "?"}
+              </span>
+            )}
           </div>
           <ul
             tabIndex={0}
