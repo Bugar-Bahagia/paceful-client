@@ -4,7 +4,6 @@ import UpdateActivity from "./Update Activity";
 import axiosClient from "../../utils/axiosClient";
 import Swal from "sweetalert2";
 
-
 const tips = [
   "Great job! You’ve conquered today’s challenge. Remember, consistency is key to achieving greatness.",
   "Well done! Recovery is just as important as the workout itself. Hydrate, refuel, and rest well to come back stronger tomorrow!",
@@ -33,11 +32,11 @@ export default function AllActivity() {
   const [loading, setLoading] = useState(false);
 
   const fetchingActivity = async () => {
-    if (page > totalPages) return; // Stop fetching jika page > totalPages
+    if (page > totalPages) return;
     try {
       setLoading(true);
-      // Tambahkan delay untuk memperlambat loading
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Delay 1 detik
+      
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
 
       const response = await axiosClient.get(`/activities?page=${page}`, {
         headers: {
@@ -60,7 +59,7 @@ export default function AllActivity() {
   };
 
   useEffect(() => {
-    fetchingActivity(); // Fetch data pertama kali
+    fetchingActivity(); 
   }, []);
 
   const handleScroll = () => {
@@ -152,10 +151,10 @@ export default function AllActivity() {
             DARE YOURSELF EVERYDAY
           </h1>
           <p className="mt-4 text-lg text-gray-200">
-            "Challenge yourself daily. Defy limits, embrace growth, and transform into the best version of you."
+            "Challenge yourself daily. Defy limits, embrace growth, and
+            transform into the best version of you."
           </p>
         </header>
-
         <div className="flex justify-center items-center pt-10">
           <button
             className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
@@ -164,67 +163,62 @@ export default function AllActivity() {
             Add new activity
           </button>
         </div>
-
         <div className="flex flex-wrap justify-center items-center gap-4 pt-10 pb-10">
-  {data.length === 0 ? (
-    <div className="flex flex-col items-center">
-      <img
-        src={"../../../public/image/foto.webp"}
-        alt="Motivational Fitness"
-        className="rounded-lg shadow-lg"
-      />
-      <p className="mt-4 text-lg text-white">
-        "Stay motivated! Your fitness journey starts with a single step."
-      </p>
-    </div>
-  ) : (
-    data.map((e) => (
-      <div
-        key={e.id}
-        className="card bg-gradient-to-b from-white to-teal-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
-      >
-        <div className="card-body items-center text-center text-black">
-          <h3 className="card-title text-xl font-semibold text-black-400 underline">
-            {e.typeName.toUpperCase()}
-          </h3>
-          <p>"{e.notes}"</p>
-          <p>Duration: {formatNumber(Number(e.duration))} menit</p>
-          <p>Distance: {formatNumber(Number(e.distance))} meter</p>
-          <p>Kalori Burn: {formatNumber(Number(e.caloriesBurned))} kalori</p>
-          <p className="text-sm text-gray-400">
-            {new Date(e.activityDate).toLocaleDateString()}
-          </p>
-          <div className="card-actions justify-end">
-            <button
-              onClick={() => handleDelete(e.id)}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-            >
-              Delete
-            </button>
-            <button
-              onClick={() => openModal(e.id)}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            >
-              Update
-            </button>
-          </div>
+          {data.length === 0 ? (
+            <div className="flex flex-col items-center">
+              <img
+                src={"../../../public/image/foto.webp"}
+                alt="Motivational Fitness"
+                className="rounded-lg shadow-lg"
+              />
+              <p className="mt-4 text-lg text-white">
+                "Stay motivated! Your fitness journey starts with a single
+                step."
+              </p>
+            </div>
+          ) : (
+            data.map((e) => (
+              <div
+                key={e.id}
+                className="card bg-gradient-to-b from-white to-teal-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <div className="card-body items-center text-center text-black">
+                  <h3 className="card-title text-xl font-semibold text-black-400 underline">
+                    {e.typeName.toUpperCase()}
+                  </h3>
+                  <p>"{e.notes}"</p>
+                  <p>Duration: {formatNumber(Number(e.duration))} menit</p>
+                  <p>Distance: {formatNumber(Number(e.distance))} meter</p>
+                  <p>
+                    Kalori Burn: {formatNumber(Number(e.caloriesBurned))} kalori
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    {new Date(e.activityDate).toLocaleDateString()}
+                  </p>
+                  <div className="card-actions justify-end">
+                    <button
+                      onClick={() => handleDelete(e.id)}
+                      className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => openModal(e.id)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
-      </div>
-    ))
-  )}
-</div>
-
         {loading && <p className="text-center text-white">Loading...</p>}
 
-        
-
-return (
-  <div className="text-center">
-    <p className="mt-4 text-lg text-gray-200">Tips: {randomTip}</p>
-  </div>
-);
-
-
+        <div className="text-center">
+          <p className="mt-4 text-lg text-gray-200">Tips: {randomTip}</p>
+        </div>
         {/* Modal for Adding or Updating Activity */}
         <dialog
           id="activity_modal"
