@@ -149,7 +149,7 @@ const UserProfile = () => {
                 onClick={handleDeleteProfile}
                 className="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5"
               >
-                Delete Profile
+                Delete Account
               </button>
             </div>
           </form>
