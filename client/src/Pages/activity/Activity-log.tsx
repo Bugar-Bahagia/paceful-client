@@ -97,7 +97,7 @@ export default function AllActivity() {
     <div className="bg bg-gradient-to-b from-teal-600 to-lemon-800 min-h-screen">
       <div className="flex justify-center items-center pt-10">
         <button
-          className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 focus:outline-none"
+          className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
           onClick={() => openModal()}
         >
           Add new activity
@@ -111,7 +111,7 @@ export default function AllActivity() {
             className="card bg-gradient-to-b from-white to-teal-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <div className="card-body items-center text-center text-black">
-              <h3 className="card-title text-xl font-semibold text-teal-400 underline">
+              <h3 className="card-title text-xl font-semibold text-black-400 underline">
                 {e.typeName.toUpperCase()}
               </h3>
               <p>{formatNumber(Number(e.duration))} menit</p>
@@ -127,7 +127,7 @@ export default function AllActivity() {
                 </button>
                 <button
                   onClick={() => openModal(e.id)}
-                  className="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 >
                   Update
                 </button>

@@ -95,7 +95,8 @@ export default function AllGoals() {
   };
 
   return (
-    <div className="bg bg-gradient-to-r from-blue-600 to-blue-800 min-h-screen">
+    <div className="bg bg-gradient-to-b from-orange-600 to-white-800 min-h-screen">
+
       <div className="flex justify-center items-center pt-10">
         <button
           className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
@@ -109,10 +110,10 @@ export default function AllGoals() {
         {data.map((goal) => (
           <div
             key={goal.id}
-            className="card bg-gray-800 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="card bg-gradient-to-b from-white to-orange-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            <div className="card-body items-center text-center">
-              <h3 className="card-title text-xl font-semibold text-blue-400">
+            <div className="card-body items-center text-center text-black">
+              <h3 className="card-title text-xl font-semibold text-black-400 underline">
                 {goal.typeName.toUpperCase()}
               </h3>
               <p>Target: {goal.targetValue}</p>
