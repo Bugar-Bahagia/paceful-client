@@ -6,14 +6,15 @@ import ActivityLog from '../components/ActivityLog'
 
 
 export default function Home() {
-  const [showGemini, setShowGemini] = useState(false);
+  const [showGemini, setShowGemini] = useState(false)
 
-  const handleOpenGemini = () => setShowGemini(true);
-  const handleCloseGemini = () => setShowGemini(false);
+  const handleOpenGemini = () => setShowGemini(true)
+  const handleCloseGemini = () => setShowGemini(false)
 
   return (
     <div className="relative">
-      <h1>Welcome to Home Page</h1>
+      <h1 className="text-center mt-10 text-3xl font-bold">Your Adventure Starts Here</h1>
+
 
       <Dashboard />
 
@@ -23,8 +24,6 @@ export default function Home() {
       <button onClick={handleOpenGemini} className="fixed bottom-4 left-1/2 transform -translate-x-1/2 p-4 rounded-full shadow-lg" style={{ background: 'none', border: 'none' }}>
         <img src="https://premiercloud.com/wp-content/uploads/2024/07/google-gemini-icon.png" alt="Gemini AI" className="w-12 h-12" />
       </button>
-      {showGemini && <GeminiAi onClose={handleCloseGemini} />}
-
       {/* Gemini AI Modal centered */}
       {showGemini && (
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-opacity-50 bg-black">
@@ -34,5 +33,5 @@ export default function Home() {
         </div>
       )}
     </div>
-  );
+  )
 }
