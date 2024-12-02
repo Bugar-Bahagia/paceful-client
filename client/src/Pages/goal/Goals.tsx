@@ -123,6 +123,7 @@ export default function AllGoals() {
     setSelectedGoalId(null);
     const modal = document.getElementById("goal_modal") as HTMLDialogElement;
     if (modal) modal.close();
+    
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -163,33 +164,51 @@ export default function AllGoals() {
               </p>
             </div>) : (data.map((goal) => (
           <div
-            key={goal.id}
-            className="card bg-gradient-to-b from-white to-orange-100 text-gray-800 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg"
-          >
-            <div className="card-body flex flex-col items-center text-center">
-              <h3 className="card-title text-xl font-bold text-black-400 underline">
-                {goal.typeName.toUpperCase()}
-              </h3>
-              <p>Target Value: {goal.targetValue}</p>
-              <p>Current Value: {goal.currentValue}</p>
-              <p>Start Date: {new Date(goal.startDate).toLocaleDateString()}</p>
-              <p>End Date: {new Date(goal.endDate).toLocaleDateString()}</p>
-              <div className="card-actions justify-end">
-                <button
-                  onClick={() => handleDelete(goal.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => openModal(goal.id)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                >
-                  Update
-                </button>
-              </div>
+          key={goal.id}
+          className="card bg-gradient-to-b from-white to-orange-100 text-gray-800 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg"
+        >
+          <div className="card-body flex flex-col items-center text-center">
+            <h3 className="card-title text-xl font-bold text-black-400 underline ">
+              {goal.typeName.toUpperCase()}
+            </h3>
+    
+            {/* Progress Status */}
+            <div className="">
+              <p className="text-xl font-semibold text-center pb-1 ">
+                {goal.isAchieved
+                  ? 'Achieved'
+                  
+                  : 'On Progress'
+                 }
+              </p>
+              <p className="text-lg font-semibold">
+                {goal.isAchieved ? 100 : Math.round((goal.currentValue / goal.targetValue) * 100)}%
+              </p>
+            </div>
+            <span>---------------------------</span>
+            {/* Goal Information */}
+            <div className="text-center">
+              <p className="text-lg font-semibold">{goal.currentValue}/{goal.targetValue}</p> {/* Bold current/target */}
+              <p className="text-lg">{new Date(goal.startDate).toLocaleDateString()} - {new Date(goal.endDate).toLocaleDateString()}</p>
+            </div>
+    
+            {/* Action Buttons */}
+            <div className="card-actions flex gap-4 justify-center mt-4">
+              <button
+                onClick={() => handleDelete(goal.id)} // Trigger SweetAlert2 here
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => openModal(goal.id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              >
+                Update
+              </button>
             </div>
           </div>
+        </div>
         )))}
       </div>
       {loading && <p className="text-center text-white">Loading...</p>}
