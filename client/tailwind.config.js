@@ -11,9 +11,9 @@ export default {
     themes: [
       {
         mytheme: {
-          primary: "#ffffff"
-        }
-      }
-    ]
-  }
+          primary: '#ffffff',
+        },
+      },
+    ],
+  },
 };
