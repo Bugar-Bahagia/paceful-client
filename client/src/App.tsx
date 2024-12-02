@@ -9,20 +9,28 @@ import LoginPage from "./loginPage/LoginPage";
 import Home from "./Pages/Home";
 import RegisterPage from "./registerPage/RegisterPage";
 import AllActivity from "./Pages/activity/Activity-log";
-import UpdateActivity from "./Pages/activity/Update Activity";
 import UserProfile from "./userProfile/UserProfile";
 import AllGoals from "./Pages/goal/Goals";
 import Footer from "./components/Footer";
+
 
 const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+    loader: () => {
+      const isLoggedIn = localStorage.getItem("token");
+      if (isLoggedIn) {
+        throw redirect("/");
+      } else {
+        return null;
+      }
+    },
   },
   {
     path: "/login",
     loader: () => {
-      const isLoggedIn = localStorage.getItem("access_token");
+      const isLoggedIn = localStorage.getItem("token");
       if (isLoggedIn) {
         throw redirect("/");
       } else {
@@ -39,6 +47,14 @@ const router = createBrowserRouter([
     <Outlet />
     <Footer />
     </>,
+   loader: () => {
+    const isLoggedIn = localStorage.getItem("token");
+    if (!isLoggedIn) {
+      throw redirect("/login");
+    } else {
+      return null;
+    }
+  },
     children: [
       {
         path: "/",
