@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import GeminiAi from '../components/Gemini';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import Dashboard from '../components/DashboardData';
+import { useState } from "react"
+import GeminiAi from "../components/Gemini"
+import "react-responsive-carousel/lib/styles/carousel.min.css"
+import Dashboard from "../components/DashboardData"
+import ActivityLog from '../components/ActivityLog'
+
 
 export default function Home() {
   const [showGemini, setShowGemini] = useState(false);
@@ -14,6 +16,8 @@ export default function Home() {
       <h1>Welcome to Home Page</h1>
 
       <Dashboard />
+
+      <ActivityLog />
 
       {/* Floating Button with Image */}
       <button onClick={handleOpenGemini} className="fixed bottom-4 left-1/2 transform -translate-x-1/2 p-4 rounded-full shadow-lg" style={{ background: 'none', border: 'none' }}>
