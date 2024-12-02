@@ -3,11 +3,18 @@ import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../features/profileSlice';
+import { UserProfileType } from '../types/types';
+
+interface StateProps {
+  profile: {
+    profile: UserProfileType;
+  };
+}
 
 export default function Navbar() {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('token');
-  const { profile } = useSelector((state) => state.profile);
+  const { profile } = useSelector((state: StateProps) => state.profile);
   const dispatch = useDispatch();
 
   useEffect(() => {
