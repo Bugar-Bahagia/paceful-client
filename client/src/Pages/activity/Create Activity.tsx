@@ -57,13 +57,12 @@ export default function CreateActivity() {
         text: 'Create activity successful!',
       });
   
-      // Refresh the activities list on the home page
-      nav("/"); // Navigate to the list of activities page (refreshes the data)
+      
+      nav("/"); 
       
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
-  
-      // Check if error is an instance of AxiosError to safely access the response
+
       if (error instanceof AxiosError && error.response?.status === 400) {
         Swal.fire({
           icon: 'error',
@@ -71,11 +70,10 @@ export default function CreateActivity() {
           text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
         });
   
-        // Close modal when there is a 400 error
         const modal = document.getElementById("activity_modal") as HTMLDialogElement;
         if (modal) modal.close();
       } else {
-        // Show a generic error message for other types of error
+        
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
