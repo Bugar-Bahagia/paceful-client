@@ -109,7 +109,7 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("goal-modal") as HTMLDialogElement;
+    const modal = document.getElementById("goal_modal") as HTMLDialogElement;
     if (modal) {
       modal.close();
     }
@@ -138,6 +138,7 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    closeModal();
     if (!isFormDataChanged()) {
       Swal.fire({
         icon: "info",

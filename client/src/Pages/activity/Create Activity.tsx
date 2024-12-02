@@ -63,6 +63,9 @@ export default function CreateActivity() {
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
 
+      const modal = document.getElementById("activity_modal") as HTMLDialogElement;
+        if (modal) modal.close();
+
       if (error instanceof AxiosError && error.response?.status === 400) {
         Swal.fire({
           icon: 'error',
@@ -70,8 +73,7 @@ export default function CreateActivity() {
           text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
         });
   
-        const modal = document.getElementById("activity_modal") as HTMLDialogElement;
-        if (modal) modal.close();
+        
       } else {
         
         Swal.fire({

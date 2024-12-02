@@ -58,12 +58,17 @@ export default function CreateGoal() {
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
  
+      const modal = document.getElementById("goal_modal") as HTMLDialogElement;
+        if (modal) modal.close();
+
       if (error instanceof AxiosError && error.response?.status === 400) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
         });
+
+        
       } else {
         
         Swal.fire({
@@ -72,6 +77,7 @@ export default function CreateGoal() {
           text: 'Something went wrong. Please try again later!',
         });
       }
+
     }
   };
 
