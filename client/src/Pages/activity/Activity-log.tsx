@@ -45,7 +45,13 @@ export default function AllActivity() {
       });
 
       const { activities, totalPage } = response.data;
-      setData((prevData) => [...prevData, ...activities]);
+      setData((prevData: Active[]) => {
+        const newActivities = activities.filter(
+          (activity: Active) => !prevData.some((item: Active) => item.id === activity.id)
+        );
+        return [...prevData, ...newActivities];
+      });
+      
       setTotalPages(totalPage);
       setPage((prevPage) => prevPage + 1);
       setLoading(false);
@@ -133,6 +139,7 @@ export default function AllActivity() {
       "activity_modal"
     ) as HTMLDialogElement;
     if (modal) modal.close();
+    fetchingActivity()
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
