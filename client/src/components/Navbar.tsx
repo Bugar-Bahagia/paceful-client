@@ -72,7 +72,14 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <div className="relative flex items-center h-full w-full">
+      <img
+        src={'../../../public/image/logo.png'}
+        alt="Logo"
+        className="max-h-[3rem] object-contain"
+      />
+      <p className=" text-xl font-semibold px-0">PACEFUL</p>
+    </div>
       </div>
 
       <div className="navbar-center hidden lg:flex">
