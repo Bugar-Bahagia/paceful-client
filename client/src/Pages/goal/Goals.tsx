@@ -4,37 +4,84 @@ import UpdateGoal from "./Update Goal";
 import axiosClient from "../../utils/axiosClient";
 import Swal from "sweetalert2";  // Import SweetAlert2
 
+const goalTips = [
+  "You're on the right track! Stay focused on your goal and take it one step at a time. Small progress is still progress.",
+  "Keep your eyes on the prize! Break your goal down into manageable tasks and celebrate each milestone along the way.",
+  "Consistency is key to success! Make a plan, stick to it, and stay persistent. You’ve got this!",
+  "Challenges may arise, but they are part of the process. Stay resilient and keep pushing forward towards your goal!",
+  "Remember, setbacks are setups for comebacks! If things don’t go as planned, reassess and adjust your approach.",
+  "Progress is built on effort, and every effort counts. Keep moving forward, no matter how small the steps.",
+  "Stay motivated by visualizing the success at the end of your journey. Every effort brings you closer to your goal.",
+  "It’s okay to ask for support! Surround yourself with people who encourage and believe in your success.",
+];
+const randomTip = goalTips[Math.floor(Math.random() * goalTips.length)];
+
 interface Goal {
   id: string;
   typeName: string;
-  targetValue: string;
+  targetValue: number;
   startDate: string;
   endDate: string;
+  currentValue: number;
+  isAchieved: string[];
 }
 
 export default function AllGoals() {
   const [data, setData] = useState<Goal[]>([]);
   const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const fetchGoals = async () => {
+    if (page > totalPages) return;
+
     try {
-      const response = await axiosClient.get("/goals", {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay for better UX
+
+      const response = await axiosClient.get(`/goals?page=${page}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setData(response.data);
+
+      const { goals, totalPage } = response.data;
+      setData((prevData) => {
+        const newGoals = goals.filter(
+          (goal: Goal) => !prevData.some((item: Goal) => item.id === goal.id)
+        );
+        return [...prevData, ...newGoals];
+      });
+
+      setTotalPages(totalPage);
+      setPage((prevPage) => prevPage + 1);
+      setLoading(false);
     } catch (error: any) {
-      console.error(
-        "Error while fetching goals:",
-        error?.response?.data || error.message
-      );
+      console.error("Error while fetching goals:", error?.response?.data || error.message);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchGoals();
   }, []);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 10
+    ) {
+      if (!loading) fetchGoals();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading]);
 
   const handleDelete = (id: string) => {
     Swal.fire({
@@ -45,7 +92,7 @@ export default function AllGoals() {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -57,21 +104,10 @@ export default function AllGoals() {
           });
 
           setData((prevGoals) => prevGoals.filter((goal) => goal.id !== id));
-          Swal.fire(
-            'Deleted!',
-            'Your goal has been deleted.',
-            'success'
-          );
+          Swal.fire('Deleted!', 'Your goal has been deleted.', 'success');
         } catch (error: any) {
-          console.error(
-            "Error while deleting goal:",
-            error?.response?.data || error.message
-          );
-          Swal.fire(
-            'Error!',
-            'There was an issue deleting the goal.',
-            'error'
-          );
+          console.error("Error while deleting goal:", error?.response?.data || error.message);
+          Swal.fire('Error!', 'There was an issue deleting the goal.', 'error');
         }
       }
     });
@@ -95,7 +131,15 @@ export default function AllGoals() {
   };
 
   return (
-    <div className="bg bg-gradient-to-b from-orange-600 to-white-800 min-h-screen">
+    <div className="bg bg-gradient-to-b bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <header className="text-center pt-10">
+        <h1 className="text-4xl font-bold text-white">
+          ACHIEVE YOUR GOALS, STEP BY STEP
+        </h1>
+        <p className="mt-4 text-lg text-gray-200">
+          "Every small step you take brings you closer to your bigger dreams. Keep going, don’t stop now, and prove to yourself that you can finish what you started."
+        </p>
+      </header>
 
       <div className="flex justify-center items-center pt-10">
         <button
@@ -106,22 +150,33 @@ export default function AllGoals() {
         </button>
       </div>
 
-      <div className="flex flex-wrap justify-center items-center gap-4 pt-10 pb-10">
-        {data.map((goal) => (
+      <div className="flex flex-wrap justify-center items-center gap-8 pt-10 pb-10">
+        {data.length === 0 ? ( <div className="flex flex-col items-center">
+              <img
+                src={"../../../public/image/foto2.webp"}
+                alt="Motivational Fitness"
+                className="rounded-lg shadow-lg"
+              />
+              <p className="mt-4 text-lg text-white">
+                "Stay motivated! Your fitness journey starts with a single
+                step."
+              </p>
+            </div>) : (data.map((goal) => (
           <div
             key={goal.id}
-            className="card bg-gradient-to-b from-white to-orange-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
+            className="card bg-gradient-to-b from-white to-orange-100 text-gray-800 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg"
           >
-            <div className="card-body items-center text-center text-black">
-              <h3 className="card-title text-xl font-semibold text-black-400 underline">
+            <div className="card-body flex flex-col items-center text-center">
+              <h3 className="card-title text-xl font-bold text-black-400 underline">
                 {goal.typeName.toUpperCase()}
               </h3>
-              <p>Target: {goal.targetValue}</p>
+              <p>Target Value: {goal.targetValue}</p>
+              <p>Current Value: {goal.currentValue}</p>
               <p>Start Date: {new Date(goal.startDate).toLocaleDateString()}</p>
               <p>End Date: {new Date(goal.endDate).toLocaleDateString()}</p>
               <div className="card-actions justify-end">
                 <button
-                  onClick={() => handleDelete(goal.id)}  // Trigger SweetAlert2 here
+                  onClick={() => handleDelete(goal.id)}
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                 >
                   Delete
@@ -135,7 +190,12 @@ export default function AllGoals() {
               </div>
             </div>
           </div>
-        ))}
+        )))}
+      </div>
+      {loading && <p className="text-center text-white">Loading...</p>}
+
+      <div className="text-center">
+        <p className="mt-4 text-lg text-gray-200">Tips: {randomTip}</p>
       </div>
 
       {/* Modal for Adding or Updating Goal */}
@@ -153,20 +213,20 @@ export default function AllGoals() {
           </button>
           {selectedGoalId ? (
             <>
-              <h3 className="font-bold text-lg text-blue-400">Update Goal</h3>
+              <h3 className="font-bold text-lg text-teal-400">Update Goal</h3>
               <UpdateGoal
                 goalId={selectedGoalId}
                 onGoalUpdated={fetchGoals}
-              /> 
+              />
             </>
           ) : (
             <>
-              <h3 className="font-bold text-lg text-blue-400">Create New Goal</h3>
+              <h3 className="font-bold text-lg text-teal-400">Create New Goal</h3>
               <CreateGoal />
             </>
           )}
         </div>
       </dialog>
-    </div>
-  );
+        </div>
+  )
 }

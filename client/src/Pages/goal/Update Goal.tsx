@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import Swal from "sweetalert2";
+import { AxiosError } from "axios";
 
 interface GoalData {
   targetValue: string;
@@ -86,11 +87,13 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
       navigate("/goal"); // Redirect to goal list page
     } catch (error) {
       console.error("🚀 ~ handleUpdate ~ error:", error);
-      if (error.response && error.response.status === 400) {
+      if (error instanceof AxiosError && error.response?.status === 400) {
+        const message = error.response?.data?.message || "Failed to update goal. Please check your input and try again.";
+      
         Swal.fire({
           icon: "error",
           title: "Bad Request",
-          text: `${error.response?.data?.message || "Failed to update goal. Please check your input and try again."}`,
+          text: message,
         });
       } else {
         Swal.fire({
