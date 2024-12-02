@@ -115,7 +115,7 @@ const ChartCarousel: React.FC = () => {
 
 
   return (
-    <div className="max-w-full mx-auto p-4" style={{ maxWidth: "600px", margin: "0 auto", overflow: "hidden" }}>
+    <div className="max-w-full mx-auto p-4" style={{ maxWidth: "800px", margin: "0 auto", overflow: "hidden" }}>
       <div className="my-4">
         <select
           id="dataType"
