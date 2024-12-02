@@ -197,12 +197,12 @@ const RegisterPage = () => {
         </div>
         <div className="relative flex items-center justify-center min-h-screen z-10">
           <div className="w-full max-w-md bg-black bg-opacity-20 backdrop-blur-md rounded-lg shadow-lg p-8 fade-in">
-            <h1 className="text-2xl font-bold text-center mb-6 typing" style={{ color: '#009688' }}>
+            <h1 className="text-2xl font-bold text-center mb-6 typing" style={{ color: '#ff5722' }}>
               Register account
             </h1>
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Full Name
                 </label>
                 <input
@@ -216,7 +216,7 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="email" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Your email
                 </label>
                 <input
@@ -230,7 +230,7 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Password
                 </label>
                 <input
@@ -244,7 +244,7 @@ const RegisterPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="dob" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="dob" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Date of Birth
                 </label>
                 <input
@@ -273,7 +273,7 @@ const RegisterPage = () => {
                 size="large"
               />
             </div>
-            <p className="text-sm font-light text-gray-500 text-center mt-4" style={{ color: '#009688' }}>
+            <p className="text-sm font-light text-gray-500 text-center mt-4" style={{ color: '#ffffff' }}>
               Already have an account?{' '}
               <a href="/login" className="font-medium" style={{ color: '#ff5722' }}>
                 Login here
