@@ -77,7 +77,6 @@ export default function Dashboard() {
           title="Total Activities"
           value={dashboardData.totalActivities}
           color="bg-green-200"
-          details={dashboardData.typeNameCounts}
         />
         <CardDashboard
           title="Total Goals Achieved"

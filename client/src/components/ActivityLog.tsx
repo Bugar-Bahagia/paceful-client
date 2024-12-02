@@ -8,6 +8,7 @@ interface Activity {
   duration: string
   distance: string
   caloriesBurned: string
+  activityDate: string
   createdAt?: string
   updatedAt?: string
 }
@@ -49,7 +50,7 @@ export default function ActivityLog() {
   }
 
   return (
-    <div className="w-full max-w-full mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div className="w-full max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-center sm:text-left">Activity Log</h2>
         <button
@@ -72,21 +73,19 @@ export default function ActivityLog() {
         </thead>
         <tbody>
           {activities.map((activity, index) => {
-            const formattedDate = formatDate(activity.createdAt || activity.updatedAt || '')  // Menggunakan createdAt atau updatedAt
+            const formattedDate = formatDate(activity.activityDate || '')
             return (
               <tr key={index} className="border-t hover:bg-gray-50">
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.typeName || 'N/A'}</td>
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.duration || '0'}</td>
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.distance || '0'}</td>
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.caloriesBurned || '0'}</td>
-                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDate || 'No Date'}</td>  {/* Tampilkan tanggal yang diformat */}
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDate || 'No Date'}</td>
               </tr>
             )
           })}
         </tbody>
       </table>
-
-
 
       <div className="flex justify-end mt-4">
         <button
@@ -97,5 +96,6 @@ export default function ActivityLog() {
         </button>
       </div>
     </div>
+
   )
 }
