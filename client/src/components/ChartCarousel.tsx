@@ -5,6 +5,8 @@ import axios from "axios"
 
 const baseURL = "http://localhost:3000"
 
+
+
 interface ChartDataProps {
   id?: number
   UserId?: number
@@ -18,6 +20,13 @@ interface ChartDataProps {
   updatedAt?: string
 }
 
+interface APIResponse {
+  totalActivity: number
+  totalPage: number
+  currPage: number
+  activities: ChartDataProps[]
+}
+
 const ChartCarousel: React.FC = () => {
   const [activities, setActivities] = useState<ChartDataProps[]>([])
   const [selectedDataType, setSelectedDataType] = useState<string>("caloriesBurned")
@@ -25,12 +34,12 @@ const ChartCarousel: React.FC = () => {
   const fetchActivity = async () => {
     try {
       const access_token = localStorage.getItem("token")
-      const response = await axios.get(`${baseURL}/activities`, {
+      const { data }: { data: APIResponse } = await axios.get(`${baseURL}/activities`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       })
-      const sortedActivities = response.data
+      const sortedActivities = data.activities
         .sort(
           (a: ChartDataProps, b: ChartDataProps) =>
             new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime()
@@ -51,19 +60,30 @@ const ChartCarousel: React.FC = () => {
     new Date(activity.activityDate).toISOString().split("T")[0]
   )
 
+  // const getDataByType = () => {
+  //   switch (selectedDataType) {
+  //     case "caloriesBurned":
+  //       return activities.map((activity) => activity.caloriesBurned || 0)
+  //     case "duration":
+  //       return activities.map((activity) => Number(activity.duration) || 0)
+  //     default:
+  //       return []
+  //   }
+  // }
   const getDataByType = () => {
-    switch (selectedDataType) {
-      case "caloriesBurned":
-        return activities.map((activity) => activity.caloriesBurned || 0)
-      case "duration":
-        return activities.map((activity) => Number(activity.duration) || 0)
-      default:
-        return []
-    }
+    return activities.map((activity) =>
+      selectedDataType === "caloriesBurned"
+        ? activity.caloriesBurned || 0
+        : Number(activity.duration) || 0
+    )
   }
 
+  // const chartLabel =
+  //   selectedDataType === "caloriesBurned" ? "Calories Burned" : "Activities Duration (Minutes)"
   const chartLabel =
-    selectedDataType === "caloriesBurned" ? "Calories Burned" : "Activities Duration (Minutes)"
+    selectedDataType === "caloriesBurned"
+      ? "Calories Burned"
+      : "Activities Duration (Minutes)"
 
   const chartData = {
     labels: activityDates,

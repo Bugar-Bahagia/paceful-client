@@ -34,16 +34,16 @@ export default function Dashboard() {
         // Fetch total goals
         const goalsResponse = await fetch(`${baseURL}/goals`, { headers })
         const goalsData = await goalsResponse.json()
-        const totalGoals = goalsData.length
+        const totalGoals = goalsData.totalGoal
 
         // Fetch total activities
         const activitiesResponse = await fetch(`${baseURL}/activities`, { headers })
         const activitiesData = await activitiesResponse.json()
 
-        const totalActivities = activitiesData.length
+        const totalActivities = activitiesData.totalActivity
 
         // Group activities by typeName
-        const typeNameCounts: Record<string, number> = activitiesData.reduce(
+        const typeNameCounts: Record<string, number> = activitiesData.activities.reduce(
           (acc: Record<string, number>, activity: { typeName: string }) => {
             acc[activity.typeName] = (acc[activity.typeName] || 0) + 1
             return acc
