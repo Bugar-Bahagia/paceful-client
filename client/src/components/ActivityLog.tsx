@@ -49,26 +49,25 @@ export default function ActivityLog() {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Activity Log</h2>
-        {/* Tombol navigasi ke halaman Activity Log */}
+    <div className="w-full max-w-full mx-auto p-4 bg-white shadow-lg rounded-lg">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-center sm:text-left">Activity Log</h2>
         <button
-          className="bg-purple-500 text-white py-2 px-4 rounded"
-          onClick={() => navigate("/activity-log")} // Navigasi ke halaman Activity Log
+          className="bg-purple-500 text-white py-2 px-4 rounded mt-4 sm:mt-0"
+          onClick={() => navigate("/activity-log")}
         >
           + Add New Activity
         </button>
       </div>
 
-      <table className="min-w-full table-auto">
+      <table className="min-w-full table-auto overflow-x-auto">
         <thead>
           <tr className="bg-gray-100">
-            <th className="px-4 py-2 text-left">Activity Type</th>
-            <th className="px-4 py-2 text-left">Duration</th>
-            <th className="px-4 py-2 text-left">Distance</th>
-            <th className="px-4 py-2 text-left">Calories Burned</th>
-            <th className="px-4 py-2 text-left">Date</th>
+            <th className="px-2 py-1 text-left text-xs sm:text-xs md:text-sm">Activity Type</th>
+            <th className="px-2 py-1 text-left text-xs sm:text-xs md:text-sm">Duration</th>
+            <th className="px-2 py-1 text-left text-xs sm:text-xs md:text-sm">Distance</th>
+            <th className="px-2 py-1 text-left text-xs sm:text-xs md:text-sm">Calories Burned</th>
+            <th className="px-2 py-1 text-left text-xs sm:text-xs md:text-sm">Date</th>
           </tr>
         </thead>
         <tbody>
@@ -76,21 +75,23 @@ export default function ActivityLog() {
             const formattedDate = formatDate(activity.createdAt || activity.updatedAt || '')  // Menggunakan createdAt atau updatedAt
             return (
               <tr key={index} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-2">{activity.typeName || 'N/A'}</td>
-                <td className="px-4 py-2">{activity.duration || '0'}</td>
-                <td className="px-4 py-2">{activity.distance || '0'}</td>
-                <td className="px-4 py-2">{activity.caloriesBurned || '0'}</td>
-                <td className="px-4 py-2">{formattedDate || 'No Date'}</td>  {/* Tampilkan tanggal yang diformat */}
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.typeName || 'N/A'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.duration || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.distance || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.caloriesBurned || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDate || 'No Date'}</td>  {/* Tampilkan tanggal yang diformat */}
               </tr>
             )
           })}
         </tbody>
       </table>
 
+
+
       <div className="flex justify-end mt-4">
         <button
           className="bg-gray-200 text-blue-600 px-4 py-2 rounded"
-          onClick={() => navigate("/activity-log")} // Navigasi ke halaman lebih banyak aktivitas
+          onClick={() => navigate("/activity-log")}
         >
           See More
         </button>
