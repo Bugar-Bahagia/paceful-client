@@ -52,8 +52,8 @@ export default function GeminiAi({ onClose }: GeminiAiProps) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div ref={formRef} className="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4">
-        <div className="p-6">
+      <div ref={formRef} className="bg-white rounded-lg shadow-lg max-w-sm md:max-w-2xl w-full mx-4">
+        <div className="p-4 md:p-6">
           <h2 className="text-black text-xl font-semibold mb-4 text-center">
             Gemini AI Work Out Instructions
           </h2>
@@ -64,16 +64,16 @@ export default function GeminiAi({ onClose }: GeminiAiProps) {
             placeholder="Enter work out genre (e.g., run, swim)"
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full p-2 border border-gray-300 rounded mb-4 text-sm sm:text-base"
           />
           <button
             onClick={handleSend}
-            className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm sm:text-base"
           >
             Generate Instructions
           </button>
           {response && (
-            <div className="mt-4 p-2 bg-gray-50 border rounded prose max-w-3xl max-h-64 overflow-y-auto">
+            <div className="mt-4 p-2 bg-gray-50 border rounded prose max-w-2xl max-h-64 overflow-y-auto">
               <h3 className="font-semibold mb-2">Instructions:</h3>
               <ReactMarkdown>{response}</ReactMarkdown>
             </div>
