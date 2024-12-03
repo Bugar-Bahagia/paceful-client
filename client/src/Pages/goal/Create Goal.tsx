@@ -12,7 +12,11 @@ interface Goal {
   endDate: string;
 }
 
-export default function CreateGoal() {
+interface Prop {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function CreateGoal({ setPage }: Prop) {
   const [goal, setGoal] = useState<Goal>({
     typeName: "",
     targetValue: "",
@@ -43,42 +47,49 @@ export default function CreateGoal() {
         endDate: "",
       });
 
+      const modal = document.getElementById("goal_modal") as HTMLDialogElement;
+      if (modal) modal.close();
       // Show success message using SweetAlert
       Swal.fire({
         icon: 'success',
         title: 'Success!',
         text: 'Goal successfully created!',
       });
-
-      // Navigate to the home page or another page
-      nav("/");
+      setPage(1)
+      
+      nav("/goal");
 
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
+ 
+      const modal = document.getElementById("goal_modal") as HTMLDialogElement;
+        if (modal) modal.close();
 
-      // Check if the error is an instance of AxiosError to safely access the response
       if (error instanceof AxiosError && error.response?.status === 400) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
         });
+
+        
       } else {
-        // Show a generic error message for other types of error
+        
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Something went wrong. Please try again later!',
         });
       }
+
     }
   };
 
-  // Function to update goal state when form fields change
+
   const handleFieldChange = (name: string, value: string) => {
     setGoal((prevGoal) => ({
       ...prevGoal,
-      [name]: value, // Update the specific field in the goal state
+      [name]: value,
     }));
   };
 

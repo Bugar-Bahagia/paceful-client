@@ -137,19 +137,12 @@ const UserProfile = () => {
                 className="bg-gray-100 border border-[#009688] text-gray-900 rounded-lg focus:ring-2 focus:ring-[#009688] block w-full p-2"
               />
             </div>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 flex justify-center">
               <button
                 type="submit"
-                className="w-full text-white bg-[#ff5722] hover:bg-[#e64a19] font-medium rounded-lg text-sm px-5 py-2.5"
+                className="w-1/2 text-white bg-[#ff5722] hover:bg-[#e64a19] font-medium rounded-lg text-sm px-5 py-2.5"
               >
                 Update Profile
-              </button>
-              <button
-                type="button"
-                onClick={handleDeleteProfile}
-                className="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5"
-              >
-                Delete Account
               </button>
             </div>
           </form>
@@ -157,7 +150,16 @@ const UserProfile = () => {
           <p>Loading profile...</p>
         )}
       </div>
-    </div>
+      <div className="mt-10">
+        <button
+          type="button"
+          onClick={handleDeleteProfile}
+          className="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5"
+        >
+          Delete Account
+        </button>
+      </div>
+    </div >
   )
 }
 

@@ -15,7 +15,11 @@ interface Active {
   activityDate: string;
 }
 
-export default function CreateActivity() {
+interface Prop {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function CreateActivity({ setPage }: Prop) {
   const [active, setActive] = useState<Active>({
     typeName: "",
     duration: "",
@@ -56,14 +60,14 @@ export default function CreateActivity() {
         title: 'Success!',
         text: 'Create activity successful!',
       });
-  
-      // Refresh the activities list on the home page
-      nav("/"); // Navigate to the list of activities page (refreshes the data)
+      setPage(1)
       
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
-  
-      // Check if error is an instance of AxiosError to safely access the response
+
+      const modal = document.getElementById("activity_modal") as HTMLDialogElement;
+        if (modal) modal.close();
+
       if (error instanceof AxiosError && error.response?.status === 400) {
         Swal.fire({
           icon: 'error',
@@ -71,11 +75,9 @@ export default function CreateActivity() {
           text: error.response?.data?.message || 'Bad Request. Please check your inputs.',
         });
   
-        // Close modal when there is a 400 error
-        const modal = document.getElementById("activity_modal") as HTMLDialogElement;
-        if (modal) modal.close();
+        
       } else {
-        // Show a generic error message for other types of error
+        
         Swal.fire({
           icon: 'error',
           title: 'Oops...',

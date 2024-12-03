@@ -12,7 +12,7 @@ const tips = [
 ];
 
 const randomTip = tips[Math.floor(Math.random() * tips.length)];
-interface Active {
+export interface Active {
   id: string;
   typeName: string;
   duration: string;
@@ -45,9 +45,21 @@ export default function AllActivity() {
       });
 
       const { activities, totalPage } = response.data;
-      setData((prevData) => [...prevData, ...activities]);
+      setData((prevData: Active[]) => {
+        const newActivities = activities.filter(
+          (activity: Active) => !prevData.some((item: Active) => item.id === activity.id)
+        );
+        return [...newActivities, ...prevData ];
+      });
+      // setData((prevData: Active[]) => {
+        
+      //   return [...prevData, ...activities];
+      // });
+      // setData(activities)
+      console.log('activities', activities);
+      
       setTotalPages(totalPage);
-      setPage((prevPage) => prevPage + 1);
+      // setPage((prevPage) => prevPage + 1);
       setLoading(false);
     } catch (error: any) {
       console.error(
@@ -60,9 +72,11 @@ export default function AllActivity() {
 
   useEffect(() => {
     fetchingActivity(); 
-  }, []);
+  }, [page]);
 
   const handleScroll = () => {
+    setPage((prevPage) => prevPage + 1);
+
     if (
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - 10
@@ -133,6 +147,7 @@ export default function AllActivity() {
       "activity_modal"
     ) as HTMLDialogElement;
     if (modal) modal.close();
+    fetchingActivity()
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -144,7 +159,7 @@ export default function AllActivity() {
 
   return (
     <>
-      <div className="bg bg-gradient-to-b bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="bg bg-gradient-to-b bg-gray-500 dark:bg-gray-900 min-h-screen">
         {/* Header Section */}
         <header className="text-center pt-10">
           <h1 className="text-4xl font-bold text-white">
@@ -167,10 +182,14 @@ export default function AllActivity() {
           {data.length === 0 ? (
             <div className="flex flex-col items-center">
               <img
-                src={"../../../public/image/foto.webp"}
+                src={"../../../public/image/3.jpg"}
                 alt="Motivational Fitness"
-                className="rounded-lg shadow-lg"
-              />
+                className="rounded-lg shadow-lg "
+                style={{
+                  width: "600px", // atau gunakan unit lain seperti rem, %, dll.
+                  height: "300px",
+                }}
+                />
               <p className="mt-4 text-lg text-white">
                 "Stay motivated! Your fitness journey starts with a single
                 step."
@@ -238,6 +257,8 @@ export default function AllActivity() {
                   Update Activity
                 </h3>
                 <UpdateActivity
+                setActivity={setData}
+                setPage={setPage}
                   activityId={selectedActivityId}
                   onActivityUpdated={fetchingActivity}
                 />
@@ -247,7 +268,7 @@ export default function AllActivity() {
                 <h3 className="font-bold text-lg text-teal-400">
                   Create New Activity
                 </h3>
-                <CreateActivity />
+                <CreateActivity setPage={setPage} />
               </>
             )}
           </div>

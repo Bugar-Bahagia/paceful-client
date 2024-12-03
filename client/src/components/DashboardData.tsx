@@ -66,8 +66,8 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-4">
-      <div className="flex space-x-4 justify-center">
+    <div className="w-full max-w-6xl mx-auto p-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
         <CardDashboard
           title="Total Goals"
           value={dashboardData.totalGoals}
@@ -77,7 +77,6 @@ export default function Dashboard() {
           title="Total Activities"
           value={dashboardData.totalActivities}
           color="bg-green-200"
-          details={dashboardData.typeNameCounts} // Kirimkan data aktivitas berdasarkan tipe
         />
         <CardDashboard
           title="Total Goals Achieved"
@@ -89,4 +88,5 @@ export default function Dashboard() {
       <ChartCarousel />
     </div>
   )
+
 }

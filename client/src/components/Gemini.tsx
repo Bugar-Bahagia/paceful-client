@@ -1,19 +1,20 @@
-import { useState, useRef, useEffect } from "react";
-import axiosClient from "../utils/axiosClient"; // Ensure this is correctly configured to export axios instance
+import { useState, useRef, useEffect } from "react"
+import axiosClient from "../utils/axiosClient" // Ensure this is correctly configured to export axios instance
+import ReactMarkdown from "react-markdown"
 
 type GeminiAiProps = {
-  onClose: () => void;
-};
+  onClose: () => void
+}
 
 export default function GeminiAi({ onClose }: GeminiAiProps) {
-  const [response, setResponse] = useState<string>("");
-  const [genre, setGenre] = useState<string>("");
-  const formRef = useRef<HTMLDivElement>(null);
+  const [response, setResponse] = useState<string>("")
+  const [genre, setGenre] = useState<string>("")
+  const formRef = useRef<HTMLDivElement>(null)
 
   const handleSend = async () => {
     try {
       // Ensure the 'genre' is URL-encoded to handle special characters or spaces
-      const encodedGenre = encodeURIComponent(genre);
+      const encodedGenre = encodeURIComponent(genre)
 
       // Send the GET request with the genre as a query parameter
       const { data } = await axiosClient.get("http://localhost:3000/gemini", {
@@ -21,33 +22,33 @@ export default function GeminiAi({ onClose }: GeminiAiProps) {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Attach token
         },
-      });
+      })
 
       // Handle the response
       if (data?.result) {
-        setResponse(data.result);  // Display the 'result' returned from the server
+        setResponse(data.result)  // Display the 'result' returned from the server
       } else {
-        setResponse("No response received.");
+        setResponse("No response received.")
       }
     } catch (error) {
-      console.error("🚀 ~ handleSend ~ error:", error);
-      setResponse("An error occurred while fetching the instructions.");
+      console.error("🚀 ~ handleSend ~ error:", error)
+      setResponse("An error occurred while fetching the instructions.")
     }
-  };
+  }
 
   // Close the form if a click happens outside of it
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        onClose();
+        onClose()
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [onClose])
 
   return (
     <div className="flex justify-center p-4">
@@ -70,12 +71,12 @@ export default function GeminiAi({ onClose }: GeminiAiProps) {
           Generate Instructions
         </button>
         {response && (
-          <div className="mt-4 p-2 bg-black border rounded text-white">
+          <div className="mt-4 p-2 bg-gray-100 border rounded prose max-h-64 overflow-y-auto">
             <h3 className="font-semibold">Instructions:</h3>
-            <p>{response}</p>
+            <ReactMarkdown>{response}</ReactMarkdown>
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }

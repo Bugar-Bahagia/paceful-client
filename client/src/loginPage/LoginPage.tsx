@@ -185,13 +185,13 @@ const LoginPage = () => {
           />
         </div>
         <div className="relative flex items-center justify-center min-h-screen z-10">
-          <div className="w-full max-w-md bg-black bg-opacity-20 backdrop-blur-md rounded-lg shadow-lg p-8 fade-in">
-            <h1 className="text-2xl font-bold text-center mb-6 typing" style={{ color: '#009688' }}>
+          <div className="w-full max-w-md bg-black bg-opacity-45 backdrop-blur-md rounded-lg shadow-lg p-8 fade-in">
+            <h1 className="text-2xl font-bold text-center mb-6 typing" style={{ color: '#ff5722' }}>
               Welcome Back
             </h1>
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="email" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Your email
                 </label>
                 <input
@@ -205,7 +205,7 @@ const LoginPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium" style={{ color: '#009688' }}>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium" style={{ color: '#ff5722' }}>
                   Password
                 </label>
                 <input
@@ -235,7 +235,7 @@ const LoginPage = () => {
             <div className="text-center mt-6">
               <p className="text-sm text-white">
                 Don't have an account?{' '}
-                <a href="/register" className="font-medium text-[#ff5722] hover:text-[#009688]">
+                <a href="/register" className="font-medium text-[#ff5722] hover:text-[#D2E0FB]">
                   Sign up here
                 </a>
               </p>

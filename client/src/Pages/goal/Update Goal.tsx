@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import Swal from "sweetalert2";
+import { AxiosError } from "axios";
+import { Goal } from "./Goals";
 
 interface GoalData {
   targetValue: string;
@@ -10,11 +12,18 @@ interface GoalData {
 }
 
 interface UpdateGoalProps {
+  setGoal: React.Dispatch<React.SetStateAction<Goal[]>>,
+  setPage: React.Dispatch<React.SetStateAction<number>>,
   goalId: string;
   onGoalUpdated: () => void; // Callback when goal is updated
 }
 
-export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
+export default function UpdateGoal({ 
+  setPage,
+  setGoal,
+  goalId, 
+  onGoalUpdated 
+}: UpdateGoalProps) {
   const navigate = useNavigate();
 
   const [data, setData] = useState<GoalData>({
@@ -75,7 +84,9 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
       });
 
       // After successful update
-      onGoalUpdated();
+      // onGoalUpdated();
+      setGoal([])
+      setPage(1)
       closeModal();
       Swal.fire({
         icon: "success",
@@ -86,11 +97,13 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
       navigate("/goal"); // Redirect to goal list page
     } catch (error) {
       console.error("🚀 ~ handleUpdate ~ error:", error);
-      if (error.response && error.response.status === 400) {
+      if (error instanceof AxiosError && error.response?.status === 400) {
+        const message = error.response?.data?.message || "Failed to update goal. Please check your input and try again.";
+      
         Swal.fire({
           icon: "error",
           title: "Bad Request",
-          text: `${error.response?.data?.message || "Failed to update goal. Please check your input and try again."}`,
+          text: message,
         });
       } else {
         Swal.fire({
@@ -106,7 +119,7 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("goal-modal") as HTMLDialogElement;
+    const modal = document.getElementById("goal_modal") as HTMLDialogElement;
     if (modal) {
       modal.close();
     }
@@ -135,6 +148,7 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    closeModal();
     if (!isFormDataChanged()) {
       Swal.fire({
         icon: "info",
