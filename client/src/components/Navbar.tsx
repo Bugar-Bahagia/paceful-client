@@ -1,15 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+
 import pacefulLogo from "../assets/paceful-logo.png";
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../features/profileSlice';
 import { UserProfileType } from '../types/types';
 import { AppDispatch } from '../features';
+
 
 interface StateProps {
   profile: {
