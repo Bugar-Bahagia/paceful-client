@@ -1,47 +1,47 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
+import { useEffect } from "react"
 
-import pacefulLogo from "../assets/paceful-logo.png";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile } from "../features/profileSlice";
-import { UserProfileType } from "../types/types";
-import { AppDispatch } from "../features";
+import pacefulLogo from "../assets/paceful-logo.png"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchProfile } from "../features/profileSlice"
+import { UserProfileType } from "../types/types"
+import { AppDispatch } from "../features"
 
 interface StateProps {
   profile: {
-    profile: UserProfileType;
-  };
+    profile: UserProfileType
+  }
 }
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("token");
-  const { profile } = useSelector((state: StateProps) => state.profile);
-  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate()
+  const isLoggedIn = !!localStorage.getItem("token")
+  const { profile } = useSelector((state: StateProps) => state.profile)
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    dispatch(fetchProfile());
-  }, []);
+    dispatch(fetchProfile())
+  }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userProfile");
+    localStorage.removeItem("token")
+    localStorage.removeItem("userProfile")
 
     Swal.fire(
       "Logged Out!",
       "You have been logged out successfully.",
       "success"
     ).then(() => {
-      navigate("/login");
-    });
-  };
+      navigate("/login")
+    })
+  }
 
   return (
     <div className="navbar bg-base-100 border border-black-100">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden p-2 pr-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -184,8 +184,8 @@ export default function Navbar() {
               <li>
                 <form
                   onSubmit={(e) => {
-                    e.preventDefault();
-                    handleLogout();
+                    e.preventDefault()
+                    handleLogout()
                   }}
                 >
                   <button type="submit">Logout</button>
@@ -207,5 +207,5 @@ export default function Navbar() {
         </div>
       </div>
     </div>
-  );
+  )
 }
