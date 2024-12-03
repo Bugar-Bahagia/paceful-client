@@ -30,6 +30,17 @@ const ChartCarousel: React.FC = () => {
   const [activities, setActivities] = useState<ChartDataProps[]>([])
   const [selectedDataType, setSelectedDataType] = useState<string>("caloriesBurned")
 
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return "Invalid Date"
+
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+
+    return `${day}/${month}/${year}`
+  }
+
   const fetchActivity = async () => {
     try {
       const access_token = localStorage.getItem("token")
@@ -56,19 +67,10 @@ const ChartCarousel: React.FC = () => {
   }, [])
 
   const activityDates = activities.map((activity) =>
-    new Date(activity.activityDate).toISOString().split("T")[0]
+    formatDate(activity.activityDate)
   )
 
-  // const getDataByType = () => {
-  //   switch (selectedDataType) {
-  //     case "caloriesBurned":
-  //       return activities.map((activity) => activity.caloriesBurned || 0)
-  //     case "duration":
-  //       return activities.map((activity) => Number(activity.duration) || 0)
-  //     default:
-  //       return []
-  //   }
-  // }
+
   const getDataByType = () => {
     return activities.map((activity) =>
       selectedDataType === "caloriesBurned"
@@ -77,8 +79,7 @@ const ChartCarousel: React.FC = () => {
     )
   }
 
-  // const chartLabel =
-  //   selectedDataType === "caloriesBurned" ? "Calories Burned" : "Activities Duration (Minutes)"
+
   const chartLabel =
     selectedDataType === "caloriesBurned"
       ? "Calories Burned"
@@ -128,12 +129,12 @@ const ChartCarousel: React.FC = () => {
       </div>
 
 
-        {
-          [<div key={chartLabel}>
-            <h2 style={{ textDecoration: "none" }}>{chartLabel}</h2>
-            <ChartComponent labels={activityDates} datasets={chartData.datasets} options={chartOptions} />
-          </div>]
-        }
+      {
+        [<div key={chartLabel}>
+          <h2 style={{ textDecoration: "none" }}>{chartLabel}</h2>
+          <ChartComponent labels={activityDates} datasets={chartData.datasets} options={chartOptions} />
+        </div>]
+      }
     </div>
   )
 }
