@@ -11,7 +11,7 @@ Paceful is a dynamic fitness tracker app designed to help users achieve their we
 
 ## Deployment
 
-[https://paceful.web.app/](https://paceful.web.app/)
+[https://paceful-8ab67.web.app](https://paceful-8ab67.web.app)
 
 ## Environment Variables
 
