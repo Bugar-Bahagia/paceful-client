@@ -196,7 +196,7 @@ const RegisterPage = () => {
           />
         </div>
         <div className="relative flex items-center justify-center min-h-screen z-10">
-          <div className="w-full max-w-md bg-black bg-opacity-20 backdrop-blur-md rounded-lg shadow-lg p-8 fade-in">
+          <div className="w-full max-w-md bg-black bg-opacity-45 backdrop-blur-md rounded-lg shadow-lg p-8 fade-in">
             <h1 className="text-2xl font-bold text-center mb-6 typing" style={{ color: '#ff5722' }}>
               Register account
             </h1>
