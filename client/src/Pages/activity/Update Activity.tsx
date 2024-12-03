@@ -122,7 +122,7 @@ export default function UpdateActivity({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setData((prevData) => ({
@@ -208,9 +208,8 @@ export default function UpdateActivity({
             <label className="label">
               <span className="label-text text-lg font-medium">Notes</span>
             </label>
-            <input
+            <textarea
               name="notes"
-              type="text"
               value={data.notes}
               onChange={handleChange}
               placeholder="Enter notes"
