@@ -48,6 +48,30 @@ export default function ActivityLog() {
     const date = new Date(dateString)
     return isNaN(date.getTime()) ? 'Invalid Date' : date.toISOString().split("T")[0]
   }
+  const formatDuration = (duration: string): string => {
+    const totalMinutes = parseInt(duration, 10)
+    if (isNaN(totalMinutes)) return "Invalid Duration"
+
+    const hours = Math.floor(totalMinutes / 60)
+    const minutes = totalMinutes % 60
+
+    return `${hours} hours ${minutes} minutes`
+  }
+  const formatDistance = (distance: string): string => {
+    const totalMeters = parseFloat(distance)
+    if (isNaN(totalMeters)) return "Invalid Distance"
+
+    const kilometers = totalMeters / 1000
+    return `${kilometers.toFixed(2)} km`
+  }
+  const formatCalories = (calories: string): string => {
+    const totalCalories = parseFloat(calories)
+    if (isNaN(totalCalories)) return "Invalid Calories"
+
+    // Konversi kalori ke kilokalori dengan dua desimal
+    const kilocalories = totalCalories / 1000
+    return `${kilocalories.toFixed(2)} kcal`
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
@@ -74,12 +98,15 @@ export default function ActivityLog() {
         <tbody>
           {activities.map((activity, index) => {
             const formattedDate = formatDate(activity.activityDate || '')
+            const formattedDuration = formatDuration(activity.duration || "0")
+            const formattedDistance = formatDistance(activity.distance || "0")
+            const formattedCalories = formatCalories(activity.caloriesBurned || "0")
             return (
               <tr key={index} className="border-t hover:bg-gray-50">
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.typeName || 'N/A'}</td>
-                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.duration || '0'}</td>
-                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.distance || '0'}</td>
-                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{activity.caloriesBurned || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDuration || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDistance || '0'}</td>
+                <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedCalories || '0'}</td>
                 <td className="px-2 py-1 text-xs sm:text-xs md:text-sm">{formattedDate || 'No Date'}</td>
               </tr>
             )
