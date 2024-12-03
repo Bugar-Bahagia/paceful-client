@@ -45,7 +45,7 @@ export default function Navbar() {
               <NavLink
                 to={'/'}
                 style={({ isActive }) => ({
-                  color: isActive ? 'green' : 'black',
+                  color: isActive ? 'white' : 'black',
                 })}
               >
                 Dashboard
@@ -55,7 +55,7 @@ export default function Navbar() {
               <NavLink
                 to={'/activity-log'}
                 style={({ isActive }) => ({
-                  color: isActive ? 'green' : 'black',
+                  color: isActive ? 'white' : 'black',
                 })}
               >
                 Activity Log
@@ -65,7 +65,7 @@ export default function Navbar() {
               <NavLink
                 to={'/goal'}
                 style={({ isActive }) => ({
-                  color: isActive ? 'green' : 'black',
+                  color: isActive ? 'white' : 'black',
                 })}
               >
                 Goals
@@ -84,12 +84,12 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-3">
           <li>
             <NavLink
               to={'/'}
               style={({ isActive }) => ({
-                color: isActive ? 'green' : 'black',
+                color: isActive ? 'white' : 'black',
               })}
             >
               Dashboard
@@ -99,7 +99,7 @@ export default function Navbar() {
             <NavLink
               to={'/activity-log'}
               style={({ isActive }) => ({
-                color: isActive ? 'green' : 'black',
+                color: isActive ? 'white' : 'black',
               })}
             >
               Activity Log
@@ -109,7 +109,7 @@ export default function Navbar() {
             <NavLink
               to={'/goal'}
               style={({ isActive }) => ({
-                color: isActive ? 'green' : 'black',
+                color: isActive ? 'white' : 'black',
               })}
             >
               Goals
@@ -139,7 +139,7 @@ export default function Navbar() {
               <NavLink
                 to={'/profile'}
                 style={({ isActive }) => ({
-                  color: isActive ? 'green' : 'black',
+                  color: isActive ? 'white' : 'black',
                 })}
               >
                 Profile
@@ -161,7 +161,7 @@ export default function Navbar() {
                 <NavLink
                   to={'/login'}
                   style={({ isActive }) => ({
-                    color: isActive ? 'green' : 'black',
+                    color: isActive ? 'white' : 'black',
                   })}
                 >
                   Login
