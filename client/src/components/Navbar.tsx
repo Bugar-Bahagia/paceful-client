@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import pacefulLogo from "../assets/paceful-logo.png";
 
 interface UserProfile {
   email: string;
@@ -119,7 +120,21 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <a href="/">
+          <img
+            src={pacefulLogo}
+            alt="PACEFUL Logo"
+            style={{
+              height: "100px",        // Tinggi gambar
+              width: "100px",         // Lebar gambar
+              borderRadius: "50%",   // Membuat bentuk lingkaran
+              transform: "scale(1.2)", // Zoom gambar (1.2 artinya 120%)
+            }}
+          />
+        </a>
+
+
+
       </div>
 
       <div className="navbar-center hidden lg:flex">
