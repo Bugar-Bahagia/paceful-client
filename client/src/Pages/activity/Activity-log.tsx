@@ -31,11 +31,19 @@ export default function AllActivity() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const fetchingActivity = async () => {
+  
+  const fetchingActivity = async (reset: boolean= false) => {
+    let newPage = page
+    if (reset) {
+      newPage = 1
+      setPage(newPage)
+    }
+    console.log(page, totalPages,"ini ");
+    
     if (page > totalPages) return;
     try {
       setLoading(true);
-      const response = await axiosClient.get(`/activities?page=${page}`, {
+      const response = await axiosClient.get(`/activities?page=${newPage}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -43,11 +51,20 @@ export default function AllActivity() {
 
       const { activities, totalPage } = response.data;
       setData((prevData: Active[]) => {
-        const newActivities = activities.filter(
-          (activity: Active) => !prevData.some((item: Active) => item.id === activity.id)
-        );
-        return [...newActivities, ...prevData ];
+
+        if (reset === true) {
+          return [...activities];
+        } else {
+          const newActivities = activities.filter(
+            (activity: Active) => !prevData.some((item: Active) => item.id === activity.id)
+          );
+          return [...newActivities, ...prevData ];
+        }
       });
+
+      // if (reset === true) {
+      //   return [...newActivities, ...prevData ];
+      // }
       // setData((prevData: Active[]) => {
         
       //   return [...prevData, ...activities];

@@ -16,7 +16,7 @@ interface Active {
 
 interface Prop {
   setPage: React.Dispatch<React.SetStateAction<number>>
-  fetchingActivity: () => Promise<void>
+  fetchingActivity: (reset: boolean) => Promise<void>
 
 }
 
@@ -57,7 +57,7 @@ export default function CreateActivity({ fetchingActivity }: Prop) {
         text: 'Create activity successful!',
       });
       // setPage(1)
-    fetchingActivity()
+    await fetchingActivity(true)
       
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);

@@ -14,14 +14,13 @@ interface ActivityData {
 interface UpdateActivityProps {
   setActivity: React.Dispatch<React.SetStateAction<Active[]>>
   activityId: string;
-  onActivityUpdated: () => void; 
+  onActivityUpdated: (reset: boolean) => void; 
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function UpdateActivity({
   onActivityUpdated,
   setActivity,
-  setPage,
   activityId,
 }: UpdateActivityProps) {
   const [data, setData] = useState<ActivityData>({
@@ -77,7 +76,7 @@ export default function UpdateActivity({
         },
       });
       setActivity([])
-      onActivityUpdated()
+      onActivityUpdated(true)
       // setPage(1)
       closeModal();
       Swal.fire({
