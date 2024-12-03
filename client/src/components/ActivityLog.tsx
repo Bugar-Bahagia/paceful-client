@@ -43,10 +43,19 @@ export default function ActivityLog() {
     fetchActivities()
   }, [])
 
-  // Fungsi untuk format tanggal agar sesuai dengan format yang diinginkan
+
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString)
-    return isNaN(date.getTime()) ? 'Invalid Date' : date.toISOString().split("T")[0]
+
+    if (isNaN(date.getTime())) {
+      return "Invalid Date"
+    }
+
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+
+    return `${day}/${month}/${year}` // Format dd/mm/yyyy
   }
   const formatDuration = (duration: string): string => {
     const totalMinutes = parseInt(duration, 10)
