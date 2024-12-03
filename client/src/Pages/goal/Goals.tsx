@@ -16,7 +16,7 @@ const goalTips = [
 ];
 const randomTip = goalTips[Math.floor(Math.random() * goalTips.length)];
 
-interface Goal {
+export interface Goal {
   id: string;
   typeName: string;
   targetValue: number;
@@ -51,11 +51,10 @@ export default function AllGoals() {
         const newGoals = goals.filter(
           (goal: Goal) => !prevData.some((item: Goal) => item.id === goal.id)
         );
-        return [...prevData, ...newGoals];
+        return [...newGoals, ...prevData, ];
       });
 
       setTotalPages(totalPage);
-      setPage((prevPage) => prevPage + 1);
       setLoading(false);
     } catch (error: any) {
       console.error("Error while fetching goals:", error?.response?.data || error.message);
@@ -65,9 +64,10 @@ export default function AllGoals() {
 
   useEffect(() => {
     fetchGoals();
-  }, []);
-
+  }, [page]);
+  
   const handleScroll = () => {
+    setPage((prevPage) => prevPage + 1);
     if (
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - 10
@@ -113,6 +113,8 @@ export default function AllGoals() {
     });
   };
 
+  const formatNumber = (num: number): string => num.toLocaleString();
+
   const openModal = (goalId: string | null = null) => {
     setSelectedGoalId(goalId);
     const modal = document.getElementById("goal_modal") as HTMLDialogElement;
@@ -123,7 +125,7 @@ export default function AllGoals() {
     setSelectedGoalId(null);
     const modal = document.getElementById("goal_modal") as HTMLDialogElement;
     if (modal) modal.close();
-    
+    fetchGoals()
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -155,7 +157,7 @@ export default function AllGoals() {
         {data.length === 0 ? ( <div className="flex flex-col items-center">
 
               <img
-                src={"../../../public/image/3.jpg"}
+                src={"../../../public/image/4.jpg"}
                 alt="Motivational Fitness"
                 className="rounded-lg shadow-lg "
                 style={{
@@ -193,7 +195,7 @@ export default function AllGoals() {
             <span>---------------------------</span>
             {/* Goal Information */}
             <div className="text-center">
-              <p className="text-lg font-semibold">{goal.currentValue}/{goal.targetValue}</p> {/* Bold current/target */}
+              <p className="text-lg font-semibold">{formatNumber(goal.currentValue)}/{formatNumber(goal.targetValue)}</p> {/* Bold current/target */}
               <p className="text-lg">{new Date(goal.startDate).toLocaleDateString()} - {new Date(goal.endDate).toLocaleDateString()}</p>
             </div>
     
@@ -239,6 +241,8 @@ export default function AllGoals() {
             <>
               <h3 className="font-bold text-lg text-teal-400">Update Goal</h3>
               <UpdateGoal
+                setGoal={setData}
+                setPage={setPage}
                 goalId={selectedGoalId}
                 onGoalUpdated={fetchGoals}
               />
@@ -246,7 +250,7 @@ export default function AllGoals() {
           ) : (
             <>
               <h3 className="font-bold text-lg text-teal-400">Create New Goal</h3>
-              <CreateGoal />
+              <CreateGoal  setPage={setPage}/>
             </>
           )}
         </div>
