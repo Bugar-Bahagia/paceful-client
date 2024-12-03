@@ -15,7 +15,11 @@ interface Active {
   activityDate: string;
 }
 
-export default function CreateActivity() {
+interface Prop {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function CreateActivity({ setPage }: Prop) {
   const [active, setActive] = useState<Active>({
     typeName: "",
     duration: "",
@@ -56,9 +60,7 @@ export default function CreateActivity() {
         title: 'Success!',
         text: 'Create activity successful!',
       });
-  
-      
-      nav("/"); 
+      setPage(1)
       
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);
