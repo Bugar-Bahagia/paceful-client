@@ -1,9 +1,10 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile } from "../features/profileSlice";
-import { UserProfileType } from "../types/types";
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfile } from '../features/profileSlice';
+import { UserProfileType } from '../types/types';
+import { AppDispatch } from '../features';
 
 interface StateProps {
   profile: {
@@ -13,24 +14,20 @@ interface StateProps {
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("token");
+  const isLoggedIn = !!localStorage.getItem('token');
   const { profile } = useSelector((state: StateProps) => state.profile);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(fetchProfile());
-  }, [navigate]);
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userProfile");
+    localStorage.removeItem('token');
+    localStorage.removeItem('userProfile');
 
-    Swal.fire(
-      "Logged Out!",
-      "You have been logged out successfully.",
-      "success"
-    ).then(() => {
-      navigate("/login");
+    Swal.fire('Logged Out!', 'You have been logged out successfully.', 'success').then(() => {
+      navigate('/login');
     });
   };
 
@@ -39,30 +36,16 @@ export default function Navbar() {
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
+          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
             <li>
               <NavLink
-                to={"/"}
+                to={'/'}
                 style={({ isActive }) => ({
-                  color: isActive ? "green" : "black",
+                  color: isActive ? 'green' : 'black',
                 })}
               >
                 Dashboard
@@ -70,9 +53,9 @@ export default function Navbar() {
             </li>
             <li>
               <NavLink
-                to={"/activity-log"}
+                to={'/activity-log'}
                 style={({ isActive }) => ({
-                  color: isActive ? "green" : "black",
+                  color: isActive ? 'green' : 'black',
                 })}
               >
                 Activity Log
@@ -80,9 +63,9 @@ export default function Navbar() {
             </li>
             <li>
               <NavLink
-                to={"/goal"}
+                to={'/goal'}
                 style={({ isActive }) => ({
-                  color: isActive ? "green" : "black",
+                  color: isActive ? 'green' : 'black',
                 })}
               >
                 Goals
@@ -91,14 +74,10 @@ export default function Navbar() {
           </ul>
         </div>
         <div className="relative flex items-center h-full w-full">
-          <Link to={"/"}>
-            <img
-              src={"../../../public/image/logo.png"}
-              alt="Logo"
-              className="max-h-[3rem] object-contain"
-            />
+          <Link to={'/'}>
+            <img src={'../../../public/image/logo.png'} alt="Logo" className="max-h-[3rem] object-contain" />
           </Link>
-          <Link to={"/"}>
+          <Link to={'/'}>
             <p className=" text-xl font-semibold px-0">Paceful</p>
           </Link>
         </div>
@@ -108,9 +87,9 @@ export default function Navbar() {
         <ul className="menu menu-horizontal px-1">
           <li>
             <NavLink
-              to={"/"}
+              to={'/'}
               style={({ isActive }) => ({
-                color: isActive ? "green" : "black",
+                color: isActive ? 'green' : 'black',
               })}
             >
               Dashboard
@@ -118,9 +97,9 @@ export default function Navbar() {
           </li>
           <li>
             <NavLink
-              to={"/activity-log"}
+              to={'/activity-log'}
               style={({ isActive }) => ({
-                color: isActive ? "green" : "black",
+                color: isActive ? 'green' : 'black',
               })}
             >
               Activity Log
@@ -128,9 +107,9 @@ export default function Navbar() {
           </li>
           <li>
             <NavLink
-              to={"/goal"}
+              to={'/goal'}
               style={({ isActive }) => ({
-                color: isActive ? "green" : "black",
+                color: isActive ? 'green' : 'black',
               })}
             >
               Goals
@@ -142,36 +121,25 @@ export default function Navbar() {
       {/* Bagian kanan navbar */}
       <div className="navbar-end">
         <div className="avatar placeholder dropdown dropdown-end pr-4">
-          <div
-            tabIndex={0}
-            role="button"
-            className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer border border-blue-500 overflow-hidden"
-          >
+          <div tabIndex={0} role="button" className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer border border-blue-500 overflow-hidden">
             {profile?.avatar ? (
-              <img
-                src={profile.avatar}
-                alt="User Avatar"
-                className="w-full h-full object-cover"
-              />
+              <img src={profile.avatar} alt="User Avatar" className="w-full h-full object-cover" />
             ) : (
               <span className="bg-accent bg-neutral text-neutral-content text-xl">
                 {profile?.name
-                  ?.split(" ")
+                  ?.split(' ')
                   .map((word) => word[0])
-                  .join("")
-                  .toUpperCase() || "?"}
+                  .join('')
+                  .toUpperCase() || '?'}
               </span>
             )}
           </div>
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-35 p-2 shadow"
-          >
+          <ul tabIndex={0} className="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-35 p-2 shadow">
             <li>
               <NavLink
-                to={"/profile"}
+                to={'/profile'}
                 style={({ isActive }) => ({
-                  color: isActive ? "green" : "black",
+                  color: isActive ? 'green' : 'black',
                 })}
               >
                 Profile
@@ -191,9 +159,9 @@ export default function Navbar() {
             ) : (
               <li>
                 <NavLink
-                  to={"/login"}
+                  to={'/login'}
                   style={({ isActive }) => ({
-                    color: isActive ? "green" : "black",
+                    color: isActive ? 'green' : 'black',
                   })}
                 >
                   Login
