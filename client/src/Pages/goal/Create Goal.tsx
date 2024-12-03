@@ -12,7 +12,11 @@ interface Goal {
   endDate: string;
 }
 
-export default function CreateGoal() {
+interface Prop {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function CreateGoal({ setPage }: Prop) {
   const [goal, setGoal] = useState<Goal>({
     typeName: "",
     targetValue: "",
@@ -51,9 +55,9 @@ export default function CreateGoal() {
         title: 'Success!',
         text: 'Goal successfully created!',
       });
-
+      setPage(1)
       
-      nav("/");
+      nav("/goal");
 
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Goal {
   typeName: string;
@@ -22,6 +22,13 @@ export default function FormAddGoal({
   const [targetValue, setTargetValue] = useState<string>(goal.targetValue);
   const [startDate, setStartDate] = useState<string>(goal.startDate);
   const [endDate, setEndDate] = useState<string>(goal.endDate);
+
+  useEffect(() => {
+    setTypeName(goal.typeName) 
+    setTargetValue (goal.targetValue)
+    setStartDate(goal.startDate)
+    setEndDate(goal.endDate)
+  })
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

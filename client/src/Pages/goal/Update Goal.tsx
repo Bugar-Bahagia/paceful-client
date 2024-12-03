@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import Swal from "sweetalert2";
 import { AxiosError } from "axios";
+import { Goal } from "./Goals";
 
 interface GoalData {
   targetValue: string;
@@ -11,11 +12,18 @@ interface GoalData {
 }
 
 interface UpdateGoalProps {
+  setGoal: React.Dispatch<React.SetStateAction<Goal[]>>,
+  setPage: React.Dispatch<React.SetStateAction<number>>,
   goalId: string;
   onGoalUpdated: () => void; // Callback when goal is updated
 }
 
-export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
+export default function UpdateGoal({ 
+  setPage,
+  setGoal,
+  goalId, 
+  onGoalUpdated 
+}: UpdateGoalProps) {
   const navigate = useNavigate();
 
   const [data, setData] = useState<GoalData>({
@@ -76,7 +84,9 @@ export default function UpdateGoal({ goalId, onGoalUpdated }: UpdateGoalProps) {
       });
 
       // After successful update
-      onGoalUpdated();
+      // onGoalUpdated();
+      setGoal([])
+      setPage(1)
       closeModal();
       Swal.fire({
         icon: "success",
