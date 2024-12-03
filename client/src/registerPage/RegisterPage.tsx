@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [dateOfBirth, setDateOfBirth] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const baseURL = 'http://localhost:3000'
+  const baseURL = 'https://hacktiv.fathanabds.online'
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

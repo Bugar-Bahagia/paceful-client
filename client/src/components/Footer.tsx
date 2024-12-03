@@ -1,6 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="footer bg-white text-black items-center p-4">
+    <footer 
+    style={{ borderTop: '1px solid #000000' }}
+    className="footer bg-white text-black items-center p-2 ">
       <aside className="grid-flow-col items-center">
         <svg
           width="36"

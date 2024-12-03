@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { Carousel } from "react-responsive-carousel"
 import ChartComponent from "./Chart"
 import axios from "axios"
 
-const baseURL = "http://localhost:3000"
+const baseURL = "https://hacktiv.fathanabds.online"
 
 
 
@@ -129,14 +128,12 @@ const ChartCarousel: React.FC = () => {
       </div>
 
 
-      <Carousel showArrows={true} infiniteLoop={false} autoPlay={false} showThumbs={false}>
         {
           [<div key={chartLabel}>
             <h2 style={{ textDecoration: "none" }}>{chartLabel}</h2>
             <ChartComponent labels={activityDates} datasets={chartData.datasets} options={chartOptions} />
           </div>]
         }
-      </Carousel>
     </div>
   )
 }

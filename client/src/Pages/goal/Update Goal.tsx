@@ -19,10 +19,10 @@ interface UpdateGoalProps {
 }
 
 export default function UpdateGoal({ 
+  onGoalUpdated,
   setPage,
   setGoal,
   goalId, 
-  onGoalUpdated 
 }: UpdateGoalProps) {
   const navigate = useNavigate();
 
@@ -86,7 +86,8 @@ export default function UpdateGoal({
       // After successful update
       // onGoalUpdated();
       setGoal([])
-      setPage(1)
+      onGoalUpdated()
+      // setPage(0)
       closeModal();
       Swal.fire({
         icon: "success",

@@ -35,9 +35,6 @@ export default function AllActivity() {
     if (page > totalPages) return;
     try {
       setLoading(true);
-      
-      await new Promise((resolve) => setTimeout(resolve, 1000)); 
-
       const response = await axiosClient.get(`/activities?page=${page}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,7 +56,6 @@ export default function AllActivity() {
       console.log('activities', activities);
       
       setTotalPages(totalPage);
-      // setPage((prevPage) => prevPage + 1);
       setLoading(false);
     } catch (error: any) {
       console.error(
@@ -139,6 +135,7 @@ export default function AllActivity() {
       "activity_modal"
     ) as HTMLDialogElement;
     if (modal) modal.showModal();
+    
   };
 
   const closeModal = () => {
@@ -159,20 +156,21 @@ export default function AllActivity() {
 
   return (
     <>
-      <div className="bg bg-gradient-to-b bg-gray-500 dark:bg-gray-900 min-h-screen">
+      <div className="bg-white min-h-screen">
         {/* Header Section */}
         <header className="text-center pt-10">
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className="text-4xl font-bold text-black">
             DARE YOURSELF EVERYDAY
           </h1>
-          <p className="mt-4 text-lg text-gray-200">
+          <p className="mt-4 text-lg text-black">
             "Challenge yourself daily. Defy limits, embrace growth, and
             transform into the best version of you."
           </p>
         </header>
         <div className="flex justify-center items-center pt-10">
           <button
-            className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
+           style={{ color: '#ffffff' }}
+            className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
             onClick={() => openModal()}
           >
             Add new activity
@@ -199,7 +197,7 @@ export default function AllActivity() {
             data.map((e) => (
               <div
                 key={e.id}
-                className="card bg-gradient-to-b from-white to-teal-100 text-gray-100 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200"
+                className="card bg-white w-96 border border-black-900 shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 <div className="card-body items-center text-center text-black">
                   <h3 className="card-title text-xl font-semibold text-black-400 underline">
@@ -211,7 +209,7 @@ export default function AllActivity() {
                   <p>
                     Kalori Burn: {formatNumber(Number(e.caloriesBurned))} kalori
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-black">
                     {new Date(e.activityDate).toLocaleDateString()}
                   </p>
                   <div className="card-actions justify-end">
@@ -233,10 +231,10 @@ export default function AllActivity() {
             ))
           )}
         </div>
-        {loading && <p className="text-center text-white">Loading...</p>}
+        {loading && <p className="text-center text-black">Loading...</p>}
 
         <div className="text-center">
-          <p className="mt-4 text-lg text-gray-200">Tips: {randomTip}</p>
+          <p className="mt-4 text-lg text-black-200">Tips: {randomTip}</p>
         </div>
         {/* Modal for Adding or Updating Activity */}
         <dialog
@@ -257,6 +255,7 @@ export default function AllActivity() {
                   Update Activity
                 </h3>
                 <UpdateActivity
+                
                 setActivity={setData}
                 setPage={setPage}
                   activityId={selectedActivityId}
@@ -268,7 +267,9 @@ export default function AllActivity() {
                 <h3 className="font-bold text-lg text-teal-400">
                   Create New Activity
                 </h3>
-                <CreateActivity setPage={setPage} />
+                <CreateActivity 
+                fetchingActivity={fetchingActivity}
+                setPage={setPage} />
               </>
             )}
           </div>

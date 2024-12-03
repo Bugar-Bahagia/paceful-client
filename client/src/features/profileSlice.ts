@@ -27,7 +27,7 @@ export const fetchProfile = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const { data } = await axios.get('http://localhost:3000/users/profile', {
+      const { data } = await axios.get('https://hacktiv.fathanabds.online/users/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
