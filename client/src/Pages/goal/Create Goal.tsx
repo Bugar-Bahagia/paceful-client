@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import FormAddGoal from "../../components/Form Goal";
 import Swal from 'sweetalert2';
@@ -13,7 +12,7 @@ interface Goal {
 }
 
 interface Prop {
-  fetchGoals: () => Promise<void>
+  fetchGoals: (reset: boolean) => Promise<void>
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -52,7 +51,7 @@ export default function CreateGoal({ fetchGoals }: Prop) {
         title: 'Success!',
         text: 'Goal successfully created!',
       });
-      fetchGoals()
+      await fetchGoals(true)
 
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);

@@ -33,23 +33,34 @@ export default function AllGoals() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const fetchGoals = async () => {
+  const fetchGoals = async (reset: boolean = false) => {
+    let newPage = page
+    if (reset) {
+      newPage = 1
+      setPage(newPage)
+    }
+        
     if (page > totalPages) return;
 
     try {
       setLoading(true);
-      const response = await axiosClient.get(`/goals?page=${page}`, {
+      const response = await axiosClient.get(`/goals?page=${newPage}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       const { goals, totalPage } = response.data;
-      setData((prevData) => {
-        const newGoals = goals.filter(
-          (goal: Goal) => !prevData.some((item: Goal) => item.id === goal.id)
-        );
-        return [...newGoals, ...prevData];
+      setData((prevData: Goal[]) => {
+        
+        if (reset === true) {
+          return [...goals];
+        } else {
+          const newGoals = goals.filter(
+            (goal: Goal) => !prevData.some((item: Goal) => item.id === goal.id)
+          );
+          return [...newGoals, ...prevData];
+        }
       });
 
       setTotalPages(totalPage);
