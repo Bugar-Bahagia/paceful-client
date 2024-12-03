@@ -125,9 +125,9 @@ export default function Navbar() {
             src={pacefulLogo}
             alt="PACEFUL Logo"
             style={{
-              height: "100px",        // Tinggi gambar
-              width: "100px",         // Lebar gambar
-              borderRadius: "50%",   // Membuat bentuk lingkaran
+              height: "70px",        // Tinggi gambar
+              width: "70px",         // Lebar gambar
+              borderRadius: "35%",   // Membuat bentuk lingkaran
               transform: "scale(1.2)", // Zoom gambar (1.2 artinya 120%)
             }}
           />
