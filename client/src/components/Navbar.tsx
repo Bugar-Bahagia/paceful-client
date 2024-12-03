@@ -1,10 +1,14 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { useEffect } from 'react';
+import { NavLink, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+import pacefulLogo from "../assets/paceful-logo.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile } from '../features/profileSlice';
 import { UserProfileType } from '../types/types';
 import { AppDispatch } from '../features';
+
 
 interface StateProps {
   profile: {
@@ -73,14 +77,21 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <div className="relative flex items-center h-full w-full">
-          <Link to={'/'}>
-            <img src={'../../../public/image/logo.png'} alt="Logo" className="max-h-[3rem] object-contain" />
-          </Link>
-          <Link to={'/'}>
-            <p className=" text-xl font-semibold px-0">Paceful</p>
-          </Link>
-        </div>
+        <a href="/">
+          <img
+            src={pacefulLogo}
+            alt="PACEFUL Logo"
+            style={{
+              height: "70px",        // Tinggi gambar
+              width: "70px",         // Lebar gambar
+              borderRadius: "35%",   // Membuat bentuk lingkaran
+              transform: "scale(1.2)", // Zoom gambar (1.2 artinya 120%)
+            }}
+          />
+        </a>
+
+
+
       </div>
 
       <div className="navbar-center hidden lg:flex">
