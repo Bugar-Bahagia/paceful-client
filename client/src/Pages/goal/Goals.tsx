@@ -153,11 +153,16 @@ export default function AllGoals() {
 
       <div className="flex flex-wrap justify-center items-center gap-8 pt-10 pb-10">
         {data.length === 0 ? ( <div className="flex flex-col items-center">
+
               <img
-                src={"../../../public/image/foto2.webp"}
+                src={"../../../public/image/3.jpg"}
                 alt="Motivational Fitness"
-                className="rounded-lg shadow-lg"
-              />
+                className="rounded-lg shadow-lg "
+                style={{
+                  width: "600px", // atau gunakan unit lain seperti rem, %, dll.
+                  height: "300px",
+                }}
+                />
               <p className="mt-4 text-lg text-white">
                 "Stay motivated! Your fitness journey starts with a single
                 step."

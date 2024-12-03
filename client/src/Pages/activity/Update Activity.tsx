@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosClient from "../../utils/axiosClient";
 import Swal from 'sweetalert2';
+import { Active } from "./Activity-log";
 
 interface ActivityData {
   typeName: string;
@@ -11,11 +12,15 @@ interface ActivityData {
 }
 
 interface UpdateActivityProps {
+  setActivity: React.Dispatch<React.SetStateAction<Active[]>>
   activityId: string;
   onActivityUpdated: () => void; // Callback to update activity list
+  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function UpdateActivity({
+  setActivity,
+  setPage,
   activityId,
   onActivityUpdated,
 }: UpdateActivityProps) {
@@ -75,8 +80,11 @@ export default function UpdateActivity({
       });
 
       // After successful update, close the modal and fetch updated data
-      onActivityUpdated(); // Re-fetch activities after update
+      // onActivityUpdated(); // Re-fetch activities after update
+      setActivity([])
+      setPage(1)
       closeModal();
+      // onActivityUpdated()
       Swal.fire({
         icon: 'success',
         title: 'Success!',

@@ -13,7 +13,6 @@ import UserProfile from "./userProfile/UserProfile";
 import AllGoals from "./Pages/goal/Goals";
 import Footer from "./components/Footer";
 
-
 const router = createBrowserRouter([
   {
     path: "/register",
@@ -39,22 +38,23 @@ const router = createBrowserRouter([
     },
     element: <LoginPage />,
   },
-  
+
   {
-    element:
-    <>
-    <Navbar />
-    <Outlet />
-    <Footer />
-    </>,
-   loader: () => {
-    const isLoggedIn = localStorage.getItem("token");
-    if (!isLoggedIn) {
-      throw redirect("/login");
-    } else {
-      return null;
-    }
-  },
+    element: (
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
+    ),
+    loader: () => {
+      const isLoggedIn = localStorage.getItem("token");
+      if (!isLoggedIn) {
+        throw redirect("/login");
+      } else {
+        return null;
+      }
+    },
     children: [
       {
         path: "/",
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
           </>
         ),
       },
-    
+
       {
         path: "/activity-log",
         element: (
@@ -89,12 +89,16 @@ const router = createBrowserRouter([
           </>
         ),
       },
-    ]
-  }
+    ],
+  },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div data-theme="light">
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

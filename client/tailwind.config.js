@@ -8,12 +8,6 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: [
-      {
-        mytheme: {
-          primary: '#ffffff',
-        },
-      },
-    ],
+    themes: ["light", "dark"],
   },
 };
