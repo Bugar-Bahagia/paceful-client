@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom" // Impor useNavigate
 
-const baseURL = "http://localhost:3000"
+const baseURL = "https://hacktiv.fathanabds.online"
 
 interface Activity {
   typeName: string
@@ -74,7 +74,7 @@ export default function ActivityLog() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+    <div className="mb-10 w-full max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-center sm:text-left">Activity Log</h2>
         <button

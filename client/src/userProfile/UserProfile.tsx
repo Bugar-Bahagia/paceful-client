@@ -23,7 +23,7 @@ const UserProfile = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:3000/users/profile', {
+        const response = await axios.get('https://hacktiv.fathanabds.online/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +55,7 @@ const UserProfile = () => {
 
     try {
       const response = await axios.put(
-        'http://localhost:3000/users/profile',
+        'https://hacktiv.fathanabds.online/users/profile',
         { name: profile.name, dateOfBirth: profile.dateOfBirth },
         {
           headers: {
@@ -85,7 +85,7 @@ const UserProfile = () => {
 
     if (confirmation.isConfirmed) {
       try {
-        const response = await axios.delete('http://localhost:3000/users/profile', {
+        const response = await axios.delete('https://hacktiv.fathanabds.online/users/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -101,7 +101,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white">
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold text-center text-[#009688] mb-6">Your Profile</h1>
 

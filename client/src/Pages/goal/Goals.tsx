@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CreateGoal from "./Create Goal";
 import UpdateGoal from "./Update Goal";
 import axiosClient from "../../utils/axiosClient";
-import Swal from "sweetalert2";  // Import SweetAlert2
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const goalTips = [
   "You're on the right track! Stay focused on your goal and take it one step at a time. Small progress is still progress.",
@@ -38,8 +38,6 @@ export default function AllGoals() {
 
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate delay for better UX
-
       const response = await axiosClient.get(`/goals?page=${page}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -51,13 +49,16 @@ export default function AllGoals() {
         const newGoals = goals.filter(
           (goal: Goal) => !prevData.some((item: Goal) => item.id === goal.id)
         );
-        return [...newGoals, ...prevData, ];
+        return [...newGoals, ...prevData];
       });
 
       setTotalPages(totalPage);
       setLoading(false);
     } catch (error: any) {
-      console.error("Error while fetching goals:", error?.response?.data || error.message);
+      console.error(
+        "Error while fetching goals:",
+        error?.response?.data || error.message
+      );
       setLoading(false);
     }
   };
@@ -65,7 +66,7 @@ export default function AllGoals() {
   useEffect(() => {
     fetchGoals();
   }, [page]);
-  
+
   const handleScroll = () => {
     setPage((prevPage) => prevPage + 1);
     if (
@@ -85,14 +86,14 @@ export default function AllGoals() {
 
   const handleDelete = (id: string) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this goal!',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "You will not be able to recover this goal!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -104,10 +105,13 @@ export default function AllGoals() {
           });
 
           setData((prevGoals) => prevGoals.filter((goal) => goal.id !== id));
-          Swal.fire('Deleted!', 'Your goal has been deleted.', 'success');
+          Swal.fire("Deleted!", "Your goal has been deleted.", "success");
         } catch (error: any) {
-          console.error("Error while deleting goal:", error?.response?.data || error.message);
-          Swal.fire('Error!', 'There was an issue deleting the goal.', 'error');
+          console.error(
+            "Error while deleting goal:",
+            error?.response?.data || error.message
+          );
+          Swal.fire("Error!", "There was an issue deleting the goal.", "error");
         }
       }
     });
@@ -125,7 +129,7 @@ export default function AllGoals() {
     setSelectedGoalId(null);
     const modal = document.getElementById("goal_modal") as HTMLDialogElement;
     if (modal) modal.close();
-    fetchGoals()
+    fetchGoals();
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -134,19 +138,22 @@ export default function AllGoals() {
   };
 
   return (
-    <div className="bg bg-gradient-to-b bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="bg-white  min-h-screen">
       <header className="text-center pt-10">
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-4xl font-bold text-black">
           ACHIEVE YOUR GOALS, STEP BY STEP
         </h1>
-        <p className="mt-4 text-lg text-gray-200">
-          "Every small step you take brings you closer to your bigger dreams. Keep going, don’t stop now, and prove to yourself that you can finish what you started."
+        <p className="mt-4 text-lg text-black">
+          "Every small step you take brings you closer to your bigger dreams.
+          Keep going, don’t stop now, and prove to yourself that you can finish
+          what you started."
         </p>
       </header>
 
       <div className="flex justify-center items-center pt-10">
         <button
-          className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
+          style={{ color: "#ffffff" }}
+          className="bg-orange-600 text-black px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none"
           onClick={() => openModal()}
         >
           Add New Goal
@@ -154,82 +161,89 @@ export default function AllGoals() {
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-8 pt-10 pb-10">
-        {data.length === 0 ? ( <div className="flex flex-col items-center">
-
-              <img
-                src={"../../../public/image/4.jpg"}
-                alt="Motivational Fitness"
-                className="rounded-lg shadow-lg "
-                style={{
-                  width: "600px", // atau gunakan unit lain seperti rem, %, dll.
-                  height: "300px",
-                }}
-                />
-              <p className="mt-4 text-lg text-white">
-                "Stay motivated! Your fitness journey starts with a single
-                step."
-              </p>
-            </div>) : (data.map((goal) => (
-          <div
-          key={goal.id}
-          className="card bg-gradient-to-b from-white to-orange-100 text-gray-800 w-96 border border-gray-600 shadow-lg hover:shadow-xl transition-all duration-200 rounded-lg"
-        >
-          <div className="card-body flex flex-col items-center text-center">
-            <h3 className="card-title text-xl font-bold text-black-400 underline ">
-              {goal.typeName.toUpperCase()}
-            </h3>
-    
-            {/* Progress Status */}
-            <div className="">
-              <p className="text-xl font-semibold text-center pb-1 ">
-                {goal.isAchieved
-                  ? 'Achieved'
-                  
-                  : 'On Progress'
-                 }
-              </p>
-              <p className="text-lg font-semibold">
-                {goal.isAchieved ? 100 : Math.round((goal.currentValue / goal.targetValue) * 100)}%
-              </p>
-            </div>
-            <span>---------------------------</span>
-            {/* Goal Information */}
-            <div className="text-center">
-              <p className="text-lg font-semibold">{formatNumber(goal.currentValue)}/{formatNumber(goal.targetValue)}</p> {/* Bold current/target */}
-              <p className="text-lg">{new Date(goal.startDate).toLocaleDateString()} - {new Date(goal.endDate).toLocaleDateString()}</p>
-            </div>
-    
-            {/* Action Buttons */}
-            <div className="card-actions flex gap-4 justify-center mt-4">
-              <button
-                onClick={() => handleDelete(goal.id)} // Trigger SweetAlert2 here
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => openModal(goal.id)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-              >
-                Update
-              </button>
-            </div>
+        {data.length === 0 ? (
+          <div className="flex flex-col items-center">
+            <img
+              src={"../../../public/image/4.jpg"}
+              alt="Motivational Fitness"
+              className="rounded-lg shadow-lg "
+              style={{
+                width: "600px", // atau gunakan unit lain seperti rem, %, dll.
+                height: "300px",
+              }}
+            />
+            <p className="mt-4 text-lg text-white">
+              "Stay motivated! Your fitness journey starts with a single step."
+            </p>
           </div>
-        </div>
-        )))}
+        ) : (
+          data.map((goal) => (
+            <div
+              key={goal.id}
+              // style={{ color: '#4CAF50' }}
+              className="card text-gray-800 w-96 border border-black-900 shadow-lg hover:shadow-xl transition-all duration-200 "
+            >
+              <div className="card-body flex flex-col items-center text-center">
+                <h3 className="card-title text-xl font-bold text-black-400 underline ">
+                  {goal.typeName.toUpperCase()}
+                </h3>
+
+                {/* Progress Status */}
+                <div className="">
+                  <p className="text-xl font-semibold text-center pb-1 ">
+                    {goal.isAchieved ? "Achieved" : "On Progress"}
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {goal.isAchieved
+                      ? 100
+                      : Math.round(
+                          (goal.currentValue / goal.targetValue) * 100
+                        )}
+                    %
+                  </p>
+                </div>
+                <span>---------------------------</span>
+                {/* Goal Information */}
+                <div className="text-center">
+                  <p className="text-lg font-semibold">
+                    {formatNumber(goal.currentValue)}/
+                    {formatNumber(goal.targetValue)}
+                  </p>{" "}
+                  {/* Bold current/target */}
+                  <p className="text-lg">
+                    {new Date(goal.startDate).toLocaleDateString()} -{" "}
+                    {new Date(goal.endDate).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="card-actions flex gap-4 justify-center mt-4">
+                  <button
+                    onClick={() => handleDelete(goal.id)} // Trigger SweetAlert2 here
+                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => openModal(goal.id)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
-      {loading && <p className="text-center text-white">Loading...</p>}
+      {loading && <p className="text-center text-black">Loading...</p>}
 
       <div className="text-center">
-        <p className="mt-4 text-lg text-gray-200">Tips: {randomTip}</p>
+        <p className="mt-4 text-lg text-black-200">Tips: {randomTip}</p>
       </div>
 
       {/* Modal for Adding or Updating Goal */}
-      <dialog
-        id="goal_modal"
-        className="modal"
-        onClick={handleOutsideClick}
-      >
+      <dialog id="goal_modal" className="modal" onClick={handleOutsideClick}>
         <div className="modal-box bg-white p-6 rounded-lg shadow-lg">
           <button
             onClick={closeModal}
@@ -249,12 +263,16 @@ export default function AllGoals() {
             </>
           ) : (
             <>
-              <h3 className="font-bold text-lg text-teal-400">Create New Goal</h3>
-              <CreateGoal  setPage={setPage}/>
+              <h3 className="font-bold text-lg text-teal-400">
+                Create New Goal
+              </h3>
+              <CreateGoal 
+              fetchGoals={fetchGoals}
+              setPage={setPage} />
             </>
           )}
         </div>
       </dialog>
-        </div>
-  )
+    </div>
+  );
 }

@@ -13,26 +13,23 @@ interface Goal {
 }
 
 interface Prop {
+  fetchGoals: () => Promise<void>
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function CreateGoal({ setPage }: Prop) {
+export default function CreateGoal({ fetchGoals }: Prop) {
   const [goal, setGoal] = useState<Goal>({
     typeName: "",
     targetValue: "",
     startDate: "",
     endDate: "",
   });
-
-  const nav = useNavigate();
-
-  // Function to handle form submission (create goal)
   const handleCreate = async (data: Goal) => {
     try {
       // Make the POST request to create a goal
       await axiosClient({
         method: "POST",
-        url: "http://localhost:3000/goals", // Replace with the actual endpoint
+        url: "https://hacktiv.fathanabds.online/goals", // Replace with the actual endpoint
         data, // Send the data from the form
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Adjust headers as necessary
@@ -55,9 +52,7 @@ export default function CreateGoal({ setPage }: Prop) {
         title: 'Success!',
         text: 'Goal successfully created!',
       });
-      setPage(1)
-      
-      nav("/goal");
+      fetchGoals()
 
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);

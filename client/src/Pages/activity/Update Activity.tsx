@@ -14,15 +14,15 @@ interface ActivityData {
 interface UpdateActivityProps {
   setActivity: React.Dispatch<React.SetStateAction<Active[]>>
   activityId: string;
-  onActivityUpdated: () => void; // Callback to update activity list
+  onActivityUpdated: () => void; 
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function UpdateActivity({
+  onActivityUpdated,
   setActivity,
   setPage,
   activityId,
-  onActivityUpdated,
 }: UpdateActivityProps) {
   const [data, setData] = useState<ActivityData>({
     typeName: "",
@@ -31,9 +31,9 @@ export default function UpdateActivity({
     notes: "",
     activityDate: "",
   });
-  const [initialData, setInitialData] = useState<ActivityData | null>(null); // Store the initial data
+  const [initialData, setInitialData] = useState<ActivityData | null>(null); 
 
-  // Fetch activity data for the specified activity ID
+  
   const fetchData = async () => {
     try {
       const response = await axiosClient({
@@ -44,19 +44,18 @@ export default function UpdateActivity({
         },
       });
 
-      // Convert the date string to yyyy-MM-dd format
+      
       const activityData = response.data;
       const formattedDate = new Date(activityData.activityDate)
         .toISOString()
         .split("T")[0];
 
-      // Set the data state with the formatted date and store initial data
       const fetchedData = {
         ...activityData,
         activityDate: formattedDate,
       };
       setData(fetchedData);
-      setInitialData(fetchedData); // Store the initial data to compare later
+      setInitialData(fetchedData); 
     } catch (error) {
       console.log("🚀 ~ fetchData ~ error:", error);
       Swal.fire({
@@ -67,7 +66,6 @@ export default function UpdateActivity({
     }
   };
 
-  // Handle updating the activity data
   const handleUpdate = async (formData: ActivityData) => {
     try {
       await axiosClient({
@@ -78,13 +76,10 @@ export default function UpdateActivity({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
-      // After successful update, close the modal and fetch updated data
-      // onActivityUpdated(); // Re-fetch activities after update
       setActivity([])
-      setPage(1)
+      onActivityUpdated()
+      // setPage(1)
       closeModal();
-      // onActivityUpdated()
       Swal.fire({
         icon: 'success',
         title: 'Success!',
@@ -105,22 +100,19 @@ export default function UpdateActivity({
           text: 'Something went wrong. Please try again later.',
         });
       }
-      closeModal(); // Close modal if there's an error
+      closeModal(); 
     }
   };
 
-  // Close modal automatically
   const closeModal = () => {
-    // Assuming you're using a modal element with id 'activity_modal'
     const modal = document.getElementById("activity_modal") as HTMLDialogElement;
     if (modal) {
-      modal.close(); // Close the modal
+      modal.close(); 
     }
   };
 
-  // Check if the form data is different from initial data
   const isFormDataChanged = (): boolean => {
-    if (!initialData) return false; // No initial data yet, so return false
+    if (!initialData) return false; 
     return (
       data.typeName !== initialData.typeName ||
       data.duration !== initialData.duration ||
@@ -143,7 +135,6 @@ export default function UpdateActivity({
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     closeModal()
-    // Check if data has been changed before submitting
     if (!isFormDataChanged()) {
       Swal.fire({
         icon: 'info',
@@ -151,7 +142,7 @@ export default function UpdateActivity({
         text: 'You have not made any changes to the data.',
       });
     } else {
-      handleUpdate(data); // Proceed with update if changes were made
+      handleUpdate(data); 
     }
   };
 

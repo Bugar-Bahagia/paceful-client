@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import CardDashboard from "./CardDashboard"
 import ChartCarousel from "./ChartCarousel"
 
-const baseURL = "http://localhost:3000"
+const baseURL = "https://hacktiv.fathanabds.online"
 
 interface DashboardData {
   totalGoals: number

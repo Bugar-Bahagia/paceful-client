@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import FormAddActivity from "../../components/Form activity";
 import Swal from 'sweetalert2'
@@ -17,9 +16,11 @@ interface Active {
 
 interface Prop {
   setPage: React.Dispatch<React.SetStateAction<number>>
+  fetchingActivity: () => Promise<void>
+
 }
 
-export default function CreateActivity({ setPage }: Prop) {
+export default function CreateActivity({ fetchingActivity }: Prop) {
   const [active, setActive] = useState<Active>({
     typeName: "",
     duration: "",
@@ -27,21 +28,18 @@ export default function CreateActivity({ setPage }: Prop) {
     notes: "",
     activityDate: "",
   });
-
-  const nav = useNavigate();
   
   const handleCreate = async (data: Active) => {
     try {
       await axiosClient({
         method: "POST",
-        url: "http://localhost:3000/activities",
+        url: "https://hacktiv.fathanabds.online/activities",
         data,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
   
-      // Reset the form after successful submission
       setActive({
         typeName: "",
         duration: "",
@@ -49,18 +47,17 @@ export default function CreateActivity({ setPage }: Prop) {
         notes: "",
         activityDate: "",
       });
-  
-      // Close the modal by setting the modal state in parent (AllActivity)
+      
       const modal = document.getElementById("activity_modal") as HTMLDialogElement;
       if (modal) modal.close();
   
-      // Show success message
       Swal.fire({
         icon: 'success',
         title: 'Success!',
         text: 'Create activity successful!',
       });
-      setPage(1)
+      // setPage(1)
+    fetchingActivity()
       
     } catch (error) {
       console.error("🚀 ~ handleCreate ~ error:", error);

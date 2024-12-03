@@ -132,6 +132,7 @@ export default function FormAddActivity({
               className="btn bg-blue-600 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-300"
             >
               Submit
+              
             </button>
           </div>
         </form>

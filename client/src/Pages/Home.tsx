@@ -26,17 +26,17 @@ export default function Home() {
     <button
       onClick={handleOpenGemini}
       className="p-4 rounded-full shadow-lg"
-      style={{ background: 'none', border: 'none' }}
+      style={{ background: 'white', border: 'none' }}
     >
       <img
         src="https://premiercloud.com/wp-content/uploads/2024/07/google-gemini-icon.png"
         alt="Gemini AI"
-        className="w-12 h-12"
+        className="w-8 h-8"
       />
     </button>
     {/* Tooltip */}
     <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-      I am Gemini
+     I am Your Instructor
     </div>
   </div>
 </div>
