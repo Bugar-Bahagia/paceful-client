@@ -15,12 +15,11 @@ interface UpdateGoalProps {
   setGoal: React.Dispatch<React.SetStateAction<Goal[]>>,
   setPage: React.Dispatch<React.SetStateAction<number>>,
   goalId: string;
-  onGoalUpdated: () => void; // Callback when goal is updated
+  onGoalUpdated: (reset: boolean) => void; // Callback when goal is updated
 }
 
 export default function UpdateGoal({ 
   onGoalUpdated,
-  setPage,
   setGoal,
   goalId, 
 }: UpdateGoalProps) {
@@ -86,7 +85,7 @@ export default function UpdateGoal({
       // After successful update
       // onGoalUpdated();
       setGoal([])
-      onGoalUpdated()
+      onGoalUpdated(true)
       // setPage(0)
       closeModal();
       Swal.fire({
