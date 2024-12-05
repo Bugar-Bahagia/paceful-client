@@ -35,3 +35,9 @@ Install dependencies with npm
   cd client
   npm install
 ```
+
+## Tech Stack
+
+- React
+- Redux
+- TailwindCSS
